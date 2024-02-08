@@ -4,22 +4,44 @@ using BveTypes.ClassWrappers;
 using FastMember;
 using TypeWrapping;
 using ObjectiveHarmonyPatch;
+using AtsEx.PluginHost.Native;
 
 namespace AtsExCsTemplate.MapPlugin
 {
-    /// <summary>
-    /// プラグインの本体
-    /// </summary>
     [PluginType(PluginType.MapPlugin)]
     internal class MapPluginMain : AssemblyPluginBase
     {
-        /// <summary>
-        /// プラグインが読み込まれた時に呼ばれる
-        /// 初期化を実装する
-        /// </summary>
-        /// <param name="builder"></param>
+        public double speed;
+        public int arrive;
+        public int past;
+        public int power;
+        public int brake;
+        public int index;
+        public int now;
+        public bool pass;
+        public double NowLocation;
+        public double NeXTLocation;
+
         public MapPluginMain(PluginBuilder builder) : base(builder)
         {
+            Life life = new Life();
+            Native.BeaconPassed += new BeaconPassedEventHandler(life.BeaconPassed) ;
+            index = BveHacker.Scenario.Route.Stations.CurrentIndex + 1;//Index
+            var station = BveHacker.Scenario.Route.Stations[index] as Station;
+            if (station == null)
+            {
+                arrive = station.ArrivalTimeMilliseconds;
+                past = station.DepartureTimeMilliseconds;
+                pass = station.Pass;
+            }
+            NowLocation = Native.VehicleState.Location;//現在位置を設定
+            NeXTLocation = BveHacker.Scenario.Route.Stations[index].Location;//次駅位置
+            power = Native.Handles.Power.Notch;//PowerNotch
+            brake = Native.Handles.Brake.Notch;//BrakeNotch
+            now = BveHacker.Scenario.TimeManager.TimeMilliseconds;//Now
+            speed = Native.VehicleState.Speed;//speed
+            life.OnStart();
+            //
             ClassMemberSet assistantDrawerMembers = BveHacker.BveTypes.GetClassInfoOf<AssistantDrawer>();
             FastMethod drawMethod = assistantDrawerMembers.GetSourceMethodOf(nameof(AssistantDrawer.Draw));
             HarmonyPatch drawPatch = HarmonyPatch.Patch(Name, drawMethod.Source,PatchType.Prefix);
@@ -32,19 +54,9 @@ namespace AtsExCsTemplate.MapPlugin
            
 
         }
-
-        /// <summary>
-        /// プラグインが解放されたときに呼ばれる
-        /// 後処理を実装する
-        /// </summary>
         public override void Dispose()
         {
         }
-
-        /// <summary>
-        /// シナリオ読み込み中に毎フレーム呼び出される
-        /// </summary>
-        /// <param name="elapsed">前回フレームからの経過時間</param>
         public override TickResult Tick(TimeSpan elapsed)
         {
             return new MapPluginTickResult();

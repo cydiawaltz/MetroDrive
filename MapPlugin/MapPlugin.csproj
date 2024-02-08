@@ -10,6 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="oldlife.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AtsEx.CoreExtensions" Version="1.0.0-rc1">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
