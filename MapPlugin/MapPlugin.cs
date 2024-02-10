@@ -25,22 +25,8 @@ namespace AtsExCsTemplate.MapPlugin
         public MapPluginMain(PluginBuilder builder) : base(builder)
         {
             Life life = new Life();
-            Native.BeaconPassed += new BeaconPassedEventHandler(life.BeaconPassed) ;
-            index = BveHacker.Scenario.Route.Stations.CurrentIndex + 1;//Index
-            var station = BveHacker.Scenario.Route.Stations[index] as Station;
-            if (station == null)
-            {
-                arrive = station.ArrivalTimeMilliseconds;
-                past = station.DepartureTimeMilliseconds;
-                pass = station.Pass;
-            }
-            NowLocation = Native.VehicleState.Location;//現在位置を設定
-            NeXTLocation = BveHacker.Scenario.Route.Stations[index].Location;//次駅位置
-            power = Native.Handles.Power.Notch;//PowerNotch
-            brake = Native.Handles.Brake.Notch;//BrakeNotch
-            now = BveHacker.Scenario.TimeManager.TimeMilliseconds;//Now
-            speed = Native.VehicleState.Speed;//speed
             life.OnStart();
+            Native.BeaconPassed += new BeaconPassedEventHandler(life.BeaconPassed) ;
             //
             ClassMemberSet assistantDrawerMembers = BveHacker.BveTypes.GetClassInfoOf<AssistantDrawer>();
             FastMethod drawMethod = assistantDrawerMembers.GetSourceMethodOf(nameof(AssistantDrawer.Draw));
@@ -59,6 +45,20 @@ namespace AtsExCsTemplate.MapPlugin
         }
         public override TickResult Tick(TimeSpan elapsed)
         {
+            index = BveHacker.Scenario.Route.Stations.CurrentIndex + 1;//Index
+            var station = BveHacker.Scenario.Route.Stations[index] as Station;
+            if (station == null)
+            {
+                arrive = station.ArrivalTimeMilliseconds;
+                past = station.DepartureTimeMilliseconds;
+                pass = station.Pass;
+            }
+            NowLocation = Native.VehicleState.Location;//現在位置を設定
+            NeXTLocation = BveHacker.Scenario.Route.Stations[index].Location;//次駅位置
+            power = Native.Handles.Power.Notch;//PowerNotch
+            brake = Native.Handles.Brake.Notch;//BrakeNotch
+            now = BveHacker.Scenario.TimeManager.TimeMilliseconds;//Now
+            speed = Native.VehicleState.Speed;//speed
             return new MapPluginTickResult();
         }
     }
