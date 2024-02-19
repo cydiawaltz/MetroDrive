@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using AtsEx.PluginHost;
-using AtsEx.PluginHost.Native;
+using System.Threading;
 
 namespace AtsExCsTemplate.MapPlugin
 {
@@ -37,6 +35,16 @@ namespace AtsExCsTemplate.MapPlugin
         //以下同じ
         int atc;
         bool HideHorn;
+        //以下Mainから取得
+        double speed;
+        int arrival;
+        int power;
+        int brake;
+        int index;
+        int now;
+        bool pass;
+        double NowLocation;
+        double NeXTLocation;
         public void OnStart()//初期化
         {
             //難しさごとに変更（現在:初級）
@@ -97,6 +105,44 @@ namespace AtsExCsTemplate.MapPlugin
                 case 901://隠し警笛終了
                     HideHorn = false;
                     break;
+            }
+        }
+        public void Update()//毎フレーム呼び出す
+        {
+            //Mainから取得した関数
+            MapPluginMain mapPluginMain = new MapPluginMain();
+            speed = mapPluginMain.speed;
+            arrive = mapPluginMain.arrival;
+            pass = mapPluginMain.past;
+            power = mapPluginMain.power;
+            brake = mapPluginMain.brake;
+            index = mapPluginMain.index;
+            NowLocation = mapPluginMain.NowLocation;
+            NeXTLocation = mapPluginMain.NeXTLocation;
+            //ATC超過
+            if(speed < atc && brake == 0) 
+            {
+                life -= overatc;
+                bool overatcset = true;
+            }
+            else{
+                bool overatcset = false;
+            }
+            //遅れ
+            if(pass = true)
+            {
+                //範囲外
+                if(Math.Abs(nowlocation - NextLocation)>GoukakuHani )
+                {
+                    life -= overtime;//５秒以上遅れたら１秒ごとに減点
+                    Thread.Sleep(1000);
+                }
+                //範囲内かつ停車していない
+                if(Math.Abs(nowlocation - NextLocation)<GoukakuHani && speed>0)
+                {
+                    life-= overtime;
+                    Thread.Sleep(1000);
+                }
             }
         }
     }
