@@ -42,6 +42,8 @@ namespace AtsExCsTemplate.MapPlugin
         }
         public override void Dispose()
         {
+            Life life = new Life() ;
+            Native.BeaconPassed -= life.BeaconPassed;
         }
         public override TickResult Tick(TimeSpan elapsed)
         {

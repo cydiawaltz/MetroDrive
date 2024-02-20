@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
+using AtsEx.PluginHost.Native;
+using AtsEx.PluginHost.Plugins;
 
 namespace AtsExCsTemplate.MapPlugin
 {
@@ -29,6 +32,7 @@ namespace AtsExCsTemplate.MapPlugin
         public bool grateset;//grate
         int bonus;
         public bool bonusset;//ボーナス（各死刑的）
+        public int life;
         //その他
         int GoukakuHani;
         public int lifetime;
@@ -37,7 +41,7 @@ namespace AtsExCsTemplate.MapPlugin
         bool HideHorn;
         //以下Mainから取得
         double speed;
-        int arrival;
+        int arrive;
         int power;
         int brake;
         int index;
@@ -48,6 +52,7 @@ namespace AtsExCsTemplate.MapPlugin
         public void OnStart()//初期化
         {
             //難しさごとに変更（現在:初級）
+            life = 30;
             //減点
             overatc = 2;//予告無視
             overtime = 1;//時間超過（一秒おき）
@@ -112,8 +117,8 @@ namespace AtsExCsTemplate.MapPlugin
             //Mainから取得した関数
             MapPluginMain mapPluginMain = new MapPluginMain();
             speed = mapPluginMain.speed;
-            arrive = mapPluginMain.arrival;
-            pass = mapPluginMain.past;
+            arrive = mapPluginMain.arrive;
+            pass = mapPluginMain.pass;
             power = mapPluginMain.power;
             brake = mapPluginMain.brake;
             index = mapPluginMain.index;
@@ -129,19 +134,17 @@ namespace AtsExCsTemplate.MapPlugin
                 bool overatcset = false;
             }
             //遅れ
-            if(pass = true)
+            if(pass == true)
             {
                 //範囲外
-                if(Math.Abs(nowlocation - NextLocation)>GoukakuHani )
+                if(Math.Abs(NowLocation - NeXTLocation)>GoukakuHani )
                 {
                     life -= overtime;//５秒以上遅れたら１秒ごとに減点
-                    Thread.Sleep(1000);
                 }
                 //範囲内かつ停車していない
-                if(Math.Abs(nowlocation - NextLocation)<GoukakuHani && speed>0)
+                if(Math.Abs(NowLocation - NeXTLocation)<GoukakuHani && speed>0)
                 {
                     life-= overtime;
-                    Thread.Sleep(1000);
                 }
             }
         }
