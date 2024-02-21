@@ -21,6 +21,7 @@ namespace AtsExCsTemplate.MapPlugin
         public bool pass;
         public double NowLocation;
         public double NeXTLocation;
+        //pipeserver
 
         public MapPluginMain(PluginBuilder builder) : base(builder)
         {
@@ -47,6 +48,8 @@ namespace AtsExCsTemplate.MapPlugin
         }
         public override TickResult Tick(TimeSpan elapsed)
         {
+            Life life = new Life();
+            int lifetime = life.life;
             index = BveHacker.Scenario.Route.Stations.CurrentIndex + 1;//Index
             var station = BveHacker.Scenario.Route.Stations[index] as Station;
             if (station == null)
@@ -61,6 +64,15 @@ namespace AtsExCsTemplate.MapPlugin
             brake = Native.Handles.Brake.Notch;//BrakeNotch
             now = BveHacker.Scenario.TimeManager.TimeMilliseconds;//Now
             speed = Native.VehicleState.Speed;//speed
+            //持ち時間に応じて
+            if(lifetime = 0)
+            {
+                brake = Native.Handles.Brake.EmergencyBrakeNotch;
+                if(speed = 0)
+                {
+                    //BVEを終了
+                }
+            }
             return new MapPluginTickResult();
         }
     }
