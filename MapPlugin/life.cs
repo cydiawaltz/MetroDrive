@@ -161,10 +161,23 @@ namespace AtsExCsTemplate.MapPlugin
                     await Task.Delay(1000);
                 }
             }
+            if(Brake == mapPluginMain.EB)
+            {
+                EBbrakeset =true;
+                life -= EBbrake;
+                await Task.Delay(1000);
+                EBbrakeset = false;
+            }
+            //警笛ボーナス
             if(HideHorn = true)
             {
                 if(/*警笛が鳴ったら*/)
-                
+                {
+                    life += bonus;
+                    bonusset = true;
+                    await Task.Delay(1000);
+                }
+                else{bonusset = false;}
             }
         }
     }

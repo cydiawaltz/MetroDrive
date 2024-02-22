@@ -22,6 +22,7 @@ namespace AtsExCsTemplate.MapPlugin
         public bool pass;
         public double NowLocation;
         public double NeXTLocation;
+        public int EB;
         //pipeserver
 
         public MapPluginMain(PluginBuilder builder) : base(builder)
@@ -65,10 +66,11 @@ namespace AtsExCsTemplate.MapPlugin
             brake = Native.Handles.Brake.Notch;//BrakeNotch
             now = BveHacker.Scenario.TimeManager.TimeMilliseconds;//Now
             speed = Native.VehicleState.Speed;//speed
+            EB = Native.Handles.Brake.EmergencyBrakeNotch;
             //持ち時間に応じて
             if(lifetime = 0)
             {
-                brake = Native.Handles.Brake.EmergencyBrakeNotch;
+                brake = EB;
                 if(speed = 0)
                 {
                     //BVEを終了
