@@ -6,6 +6,7 @@ using TypeWrapping;
 using ObjectiveHarmonyPatch;
 using AtsEx.PluginHost.Native;
 using System.Threading.Tasks;
+using System.IO.MemoryMappedFile;
 
 namespace AtsExCsTemplate.MapPlugin
 {
@@ -23,13 +24,16 @@ namespace AtsExCsTemplate.MapPlugin
         public double NowLocation;
         public double NeXTLocation;
         public int EB;
-        //pipeserver
+        //共有メモリ
+        //MemoryMappedFileViewAccessor sendtounity;
 
         public MapPluginMain(PluginBuilder builder) : base(builder)
         {
             Life life = new Life();
             life.OnStart();
             Native.BeaconPassed += new BeaconPassedEventHandler(life.BeaconPassed) ;
+            //MemoryMappedFile a = MemoryMappedFile.CreateNew("ScenarioOpen", 4096);
+            //sendtounity = a.CreateViewAccessor();
             //
             ClassMemberSet assistantDrawerMembers = BveHacker.BveTypes.GetClassInfoOf<AssistantDrawer>();
             FastMethod drawMethod = assistantDrawerMembers.GetSourceMethodOf(nameof(AssistantDrawer.Draw));
@@ -47,6 +51,7 @@ namespace AtsExCsTemplate.MapPlugin
         {
             Life life = new Life() ;
             Native.BeaconPassed -= life.BeaconPassed;
+            //sendtounity.Write(0,1);
         }
         public override TickResult Tick(TimeSpan elapsed)
         {
