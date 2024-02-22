@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading;
 using AtsEx.PluginHost.Native;
 using AtsEx.PluginHost.Plugins;
 
@@ -112,7 +111,7 @@ namespace AtsExCsTemplate.MapPlugin
                     break;
             }
         }
-        public void Update()//毎フレーム呼び出す
+        public void async Update()//毎フレーム呼び出す
         {
             //Mainから取得した関数
             MapPluginMain mapPluginMain = new MapPluginMain();
@@ -140,12 +139,32 @@ namespace AtsExCsTemplate.MapPlugin
                 if(Math.Abs(NowLocation - NeXTLocation)>GoukakuHani )
                 {
                     life -= overtime;//５秒以上遅れたら１秒ごとに減点
+                    await Task.Delay(1000);
                 }
                 //範囲内かつ停車していない
                 if(Math.Abs(NowLocation - NeXTLocation)<GoukakuHani && speed>0)
                 {
                     life-= overtime;
+                    await Task.Delay(1000);
                 }
+            }
+            else
+            {
+                if(arrival - now >5000 && NeXTLocation > NowLocation)
+                {
+                    life -= overtime;
+                    await Task.Delay(1000);
+                }
+                if(Math.Abs(arrival - now)<1000 && NeXTLocation == NowLocation)
+                {
+                    life += teitu;
+                    await Task.Delay(1000);
+                }
+            }
+            if(HideHorn = true)
+            {
+                if(/*警笛が鳴ったら*/)
+                
             }
         }
     }

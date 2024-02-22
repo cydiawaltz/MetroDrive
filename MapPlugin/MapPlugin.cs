@@ -5,6 +5,7 @@ using FastMember;
 using TypeWrapping;
 using ObjectiveHarmonyPatch;
 using AtsEx.PluginHost.Native;
+using System.Threading.Tasks;
 
 namespace AtsExCsTemplate.MapPlugin
 {
@@ -73,6 +74,7 @@ namespace AtsExCsTemplate.MapPlugin
                     //BVEを終了
                 }
             }
+            life.Update();
             return new MapPluginTickResult();
         }
     }
