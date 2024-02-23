@@ -151,12 +151,12 @@ namespace AtsExCsTemplate.MapPlugin
             }
             else
             {
-                if(arrival - now >5000 && NeXTLocation > NowLocation)
+                if(arrive - now >5000 && NeXTLocation > NowLocation)
                 {
                     life -= overtime;
                     await Task.Delay(1000);
                 }
-                if(Math.Abs(arrival - now)<1000 && NeXTLocation == NowLocation)
+                if(Math.Abs(arrive - now)<1000 && NeXTLocation == NowLocation)
                 {
                     life += teitu;
                     await Task.Delay(1000);
