@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using AtsEx.PluginHost.Native;
 using AtsEx.PluginHost.Plugins;
+using System.Threading.Tasks;
 
 namespace AtsExCsTemplate.MapPlugin
 {
@@ -111,7 +112,7 @@ namespace AtsExCsTemplate.MapPlugin
                     break;
             }
         }
-        public void async Update()//毎フレーム呼び出す
+        public async Update()//毎フレーム呼び出す
         {
             //Mainから取得した関数
             MapPluginMain mapPluginMain = new MapPluginMain();
@@ -161,7 +162,7 @@ namespace AtsExCsTemplate.MapPlugin
                     await Task.Delay(1000);
                 }
             }
-            if(Brake == mapPluginMain.EB)
+            if(brake == mapPluginMain.EB)
             {
                 EBbrakeset =true;
                 life -= EBbrake;
