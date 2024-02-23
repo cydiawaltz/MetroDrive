@@ -6,6 +6,8 @@ using System.Text;
 using AtsEx.PluginHost.Native;
 using AtsEx.PluginHost.Plugins;
 using System.Threading.Tasks;
+using System.Threading;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace AtsExCsTemplate.MapPlugin
 {
@@ -49,6 +51,7 @@ namespace AtsExCsTemplate.MapPlugin
         bool pass;
         double NowLocation;
         double NeXTLocation;
+        public MapPluginMain mapPluginMain;
         public void OnStart()//初期化
         {
             //難しさごとに変更（現在:初級）
@@ -112,10 +115,8 @@ namespace AtsExCsTemplate.MapPlugin
                     break;
             }
         }
-        public async Update()//毎フレーム呼び出す
+        public void Update()//毎フレーム呼び出す
         {
-            //Mainから取得した関数
-            MapPluginMain mapPluginMain = new MapPluginMain();
             speed = mapPluginMain.speed;
             arrive = mapPluginMain.arrive;
             pass = mapPluginMain.pass;
@@ -140,13 +141,13 @@ namespace AtsExCsTemplate.MapPlugin
                 if(Math.Abs(NowLocation - NeXTLocation)>GoukakuHani )
                 {
                     life -= overtime;//５秒以上遅れたら１秒ごとに減点
-                    await Task.Delay(1000);
+                    Delay();
                 }
                 //範囲内かつ停車していない
                 if(Math.Abs(NowLocation - NeXTLocation)<GoukakuHani && speed>0)
                 {
                     life-= overtime;
-                    await Task.Delay(1000);
+                    Delay();
                 }
             }
             else
@@ -154,19 +155,19 @@ namespace AtsExCsTemplate.MapPlugin
                 if(arrive - now >5000 && NeXTLocation > NowLocation)
                 {
                     life -= overtime;
-                    await Task.Delay(1000);
+                    Delay();
                 }
                 if(Math.Abs(arrive - now)<1000 && NeXTLocation == NowLocation)
                 {
                     life += teitu;
-                    await Task.Delay(1000);
+                    Delay();
                 }
             }
             if(brake == mapPluginMain.EB)
             {
                 EBbrakeset =true;
                 life -= EBbrake;
-                await Task.Delay(1000);
+                Delay();
                 EBbrakeset = false;
             }
             //警笛ボーナス
@@ -176,10 +177,19 @@ namespace AtsExCsTemplate.MapPlugin
                 {
                     life += bonus;
                     bonusset = true;
-                    await Task.Delay(1000);
+                    Delay();
                 }
                 else{bonusset = false;}
             }
+        }
+        static async void Delay()
+        {
+            await Task.Delay(1000);
+            return;
+        }
+        void OnHorn()
+        {
+
         }
     }
 }
