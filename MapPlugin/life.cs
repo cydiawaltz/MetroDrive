@@ -51,7 +51,6 @@ namespace AtsExCsTemplate.MapPlugin
         bool pass;
         double NowLocation;
         double NeXTLocation;
-        public MapPluginMain mapPluginMain;
         public void OnStart()//初期化
         {
             //難しさごとに変更（現在:初級）
@@ -117,6 +116,7 @@ namespace AtsExCsTemplate.MapPlugin
         }
         public void Update()//毎フレーム呼び出す
         {
+            MapPluginMain mapPluginMain;
             speed = mapPluginMain.speed;
             arrive = mapPluginMain.arrive;
             pass = mapPluginMain.pass;
@@ -135,7 +135,7 @@ namespace AtsExCsTemplate.MapPlugin
                 bool overatcset = false;
             }
             //遅れ
-            if(pass == true)
+            if(pass == false)
             {
                 //範囲外
                 if(Math.Abs(NowLocation - NeXTLocation)>GoukakuHani )
@@ -163,23 +163,48 @@ namespace AtsExCsTemplate.MapPlugin
                     Delay();
                 }
             }
-            if(brake == mapPluginMain.EB)
+            if(brake == mapPluginMain.EB)//非常制動
             {
                 EBbrakeset =true;
                 life -= EBbrake;
                 Delay();
                 EBbrakeset = false;
             }
-            //警笛ボーナス
-            if(HideHorn = true)
+            /*good!*/if(Math.Abs(NowLocation - NeXTLocation)<0.5 && speed == 0.1)
             {
-                if(/*警笛が鳴ったら*/)
+                life += good;
+                goodset = true;
+                while(i=2)//2秒表示
                 {
-                    life += bonus;
-                    bonusset = true;
                     Delay();
+                    i+=1;
                 }
-                else{bonusset = false;}
+                goodset = false;
+            }
+            /*grate!*/if(Math.Abs(NowLocation - NeXTLocation)<0.5 && speed == 0.1 && Math.Abs(now - arrive))
+            {
+                life += greate;
+                grateset = true;
+                for(i=2)
+                {
+                    Delay();
+                    i+=1;
+                }
+                grateset = false;
+            }
+            //オーバーラン
+            if (nowlocation > GoukakuHani + NeXTLocation)//過走時
+            {
+                if (speed == 0)
+                {
+                    int overrun = Convert.ToInt32(nowlocation - NeXTLocation);
+                    life -= overrun;
+                    for(i=5)
+                    {
+                        Delay();
+                        i+=1;
+                    }
+                }
             }
         }
         static async void Delay()
@@ -187,9 +212,15 @@ namespace AtsExCsTemplate.MapPlugin
             await Task.Delay(1000);
             return;
         }
-        void OnHorn()
+        void OnHorn()//警笛イベントのときに呼ばれる
         {
-
+            if(HideHorn = true)//警笛ボーナス
+            {
+                life += bonus;
+                bonusset = true;
+                Delay();
+                bonusset = false;
+            }
         }
     }
 }

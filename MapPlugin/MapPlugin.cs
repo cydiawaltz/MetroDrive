@@ -71,7 +71,7 @@ namespace AtsExCsTemplate.MapPlugin
             brake = Native.Handles.Brake.Notch;//BrakeNotch
             now = BveHacker.Scenario.TimeManager.TimeMilliseconds;//Now
             speed = Native.VehicleState.Speed;//speed
-            EB = Native.Handles.Brake.EmergencyBrakeNotch;
+            EB = Native.Handles.Brake.EmergencyBrakeNotch;//EB
             //持ち時間に応じて
             if(lifetime = 0)
             {
