@@ -13,6 +13,7 @@ namespace AtsExCsTemplate.MapPlugin
 {
     internal class Life
     {
+        /*
         //級数によって変更
         //減点
         int overatc;
@@ -53,6 +54,7 @@ namespace AtsExCsTemplate.MapPlugin
         double NeXTLocation;
         public void OnStart()//初期化
         {
+            
             //難しさごとに変更（現在:初級）
             life = 30;
             //減点
@@ -170,7 +172,7 @@ namespace AtsExCsTemplate.MapPlugin
                 Delay();
                 EBbrakeset = false;
             }
-            /*good!*/if(Math.Abs(NowLocation - NeXTLocation)<0.5 && speed == 0.1)
+            //*good!/if(Math.Abs(NowLocation - NeXTLocation)<0.5 && speed == 0.1)
             {
                 life += good;
                 goodset = true;
@@ -181,9 +183,9 @@ namespace AtsExCsTemplate.MapPlugin
                 }
                 goodset = false;
             }
-            /*grate!*/if(Math.Abs(NowLocation - NeXTLocation)<0.5 && speed == 0.1 && Math.Abs(now - arrive))
+            //*great!/if(Math.Abs(NowLocation - NeXTLocation)<0.5 && speed == 0.1 && Math.Abs(now - arrive))
             {
-                life += greate;
+                life += great;
                 grateset = true;
                 for(i=2)
                 {
@@ -221,6 +223,6 @@ namespace AtsExCsTemplate.MapPlugin
                 Delay();
                 bonusset = false;
             }
-        }
+        }*/
     }
 }
