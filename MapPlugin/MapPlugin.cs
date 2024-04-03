@@ -4,15 +4,12 @@ using BveTypes.ClassWrappers;
 using FastMember;
 using TypeWrapping;
 using ObjectiveHarmonyPatch;
-using AtsEx.PluginHost.Native;
-using System.Threading.Tasks;
 using System.IO;
 using System.Drawing;
-using System.Reflection;
 using SlimDX;
 using SlimDX.Direct3D9;
 
-namespace AtsExCsTemplate.MapPlugin
+namespace MetroDrive
 {
     [PluginType(PluginType.MapPlugin)]
     internal class MapPluginMain : AssemblyPluginBase
@@ -28,6 +25,9 @@ namespace AtsExCsTemplate.MapPlugin
         public double NowLocation;
         public double NeXTLocation;
         public int EB;
+        public float width;
+        public float height;
+        public string stringNow;
         //共有メモリ
         //MemoryMappedFileViewAccessor sendtounity;
 
@@ -35,6 +35,7 @@ namespace AtsExCsTemplate.MapPlugin
         {
             power = Native.Handles.Power.Notch;
             brake = Native.Handles.Brake.Notch;
+
             //Life life = new Life();
             //life.OnStart();
             //Native.BeaconPassed += new BeaconPassedEventHandler(life.BeaconPassed) ;
@@ -62,24 +63,24 @@ namespace AtsExCsTemplate.MapPlugin
             Model b7 = CreateBrakeModel("7");
             Model b8 = CreateBrakeModel("8");
             Model eb = CreateBrakeModel("9");
+            //固定UI
+            Model arv = CreateArvModel();
+
             drawPatch.Invoked += (sender, e) =>
             {
-                float width = Direct3DProvider.Instance.PresentParameters.BackBufferWidth;
-                float height = Direct3DProvider.Instance.PresentParameters.BackBufferHeight;
+                width = Direct3DProvider.Instance.PresentParameters.BackBufferWidth;
+                height = Direct3DProvider.Instance.PresentParameters.BackBufferHeight;
                 //3D modelをどこに配置するのか指定するかんじ device.settransform(文字略) 頂点位置の変換
-                Device powerDevice = Direct3DProvider.Instance.Device;
-                powerDevice.SetTransform(TransformState.World, Matrix.Translation(-width/2,height/2,0));
-                powerDevice.SetTransform(TransformState.View, Matrix.Identity); 
-                powerDevice.SetTransform(TransformState.Projection, Matrix.OrthoOffCenterLH(-width / 2, width / 2, -height / 2, height / 2, 0, 1));
+                Device device = Direct3DProvider.Instance.Device;
+                device.SetTransform(TransformState.World, Matrix.Translation(-width/2,height/2,0));
+                device.SetTransform(TransformState.View, Matrix.Identity); 
+                device.SetTransform(TransformState.Projection, Matrix.OrthoOffCenterLH(-width / 2, width / 2, -height / 2, height / 2, 0, 1));
                 if (power == 0) { p0.Draw(Direct3DProvider.Instance, false); }
                 if (power == 1) { p1.Draw(Direct3DProvider.Instance, false); }
                 if (power == 2) { p2.Draw(Direct3DProvider.Instance, false); }
                 if (power == 3) { p3.Draw(Direct3DProvider.Instance, false); }
                 if (power == 4) { p4.Draw(Direct3DProvider.Instance, false); }
-                Device brakeDevice = Direct3DProvider.Instance.Device;
-                brakeDevice.SetTransform(TransformState.World, Matrix.Translation(-width / 2, height / 2, 0));
-                brakeDevice.SetTransform(TransformState.View, Matrix.Identity);
-                brakeDevice.SetTransform(TransformState.Projection, Matrix.OrthoOffCenterLH(width / 2, width / 2, -height / 2, height / 2, 0, 1));
+                device.SetTransform(TransformState.World, Matrix.Translation(width/2, height / 2, 0));//(float)Math.Sin(Native.VehicleState.Time.TotalSeconds)*100
                 if (brake == 0) { b0.Draw(Direct3DProvider.Instance, false); }
                 if (brake == 1) { b1.Draw(Direct3DProvider.Instance, false); }
                 if (brake == 2) { b2.Draw(Direct3DProvider.Instance, false); }
@@ -90,19 +91,30 @@ namespace AtsExCsTemplate.MapPlugin
                 if (brake == 7) { b7.Draw(Direct3DProvider.Instance, false); }
                 if (brake == 8) { b8.Draw(Direct3DProvider.Instance, false); }
                 if (brake == Native.Handles.Brake.EmergencyBrakeNotch) { eb.Draw(Direct3DProvider.Instance, false); }
+                arv.Draw(Direct3DProvider.Instance, false); 
                 return PatchInvokationResult.DoNothing(e);
             };
             Model CreatePowerModel(string notch)
             {
                 string texFilePath = Path.Combine(Path.GetDirectoryName(Location), @"picture\P"+notch+".png");
-                RectangleF rectangleF = new RectangleF(0 / 2, 0 / 2, 200, -300);
+                RectangleF rectangleF = new RectangleF(0 / 2, 0 / 2, 150, -225);
                 Model powerNotch = Model.CreateRectangleWithTexture(rectangleF, 0, 0, texFilePath);//四角形の3Dモデル
                 return powerNotch;
             }
             Model CreateBrakeModel(string  notch)
             {
+                width = Direct3DProvider.Instance.PresentParameters.BackBufferWidth;
                 string texFilePath = Path.Combine(Path.GetDirectoryName(Location), @"picture\B" + notch + ".png");
-                RectangleF rectangleF = new RectangleF(0/ 2, 0 / 2, 200, -300);
+                RectangleF rectangleF = new RectangleF(-150, 0 / 2, 150, -225);
+                Model brakeNotch = Model.CreateRectangleWithTexture(rectangleF, 0, 0, texFilePath);//四角形の3Dモデル
+                return brakeNotch;
+            }
+            Model CreateArvModel ()
+            {
+                width = Direct3DProvider.Instance.PresentParameters.BackBufferWidth;
+                height = Direct3DProvider.Instance.PresentParameters.BackBufferHeight;
+                string texFilePath = Path.Combine(Path.GetDirectoryName(Location), @"picture\arrive\base.png");
+                RectangleF rectangleF = new RectangleF(-width/4,  -height/ 2, 180, -100);
                 Model brakeNotch = Model.CreateRectangleWithTexture(rectangleF, 0, 0, texFilePath);//四角形の3Dモデル
                 return brakeNotch;
             }

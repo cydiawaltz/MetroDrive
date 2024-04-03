@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Runtime.InteropServices.WindowsRuntime;
 
-namespace AtsExCsTemplate.MapPlugin
+namespace MetroDrive
 {
     internal class Life
     {
