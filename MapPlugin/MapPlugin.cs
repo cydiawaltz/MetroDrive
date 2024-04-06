@@ -11,7 +11,7 @@ using SlimDX.Direct3D9;
 
 namespace MetroDrive
 {
-    [PluginType(PluginType.MapPlugin)]
+    [PluginAttribute(PluginType.MapPlugin)]
     internal class MapPluginMain : AssemblyPluginBase
     {
         public double speed;
@@ -27,7 +27,18 @@ namespace MetroDrive
         public int EB;
         public float width;
         public float height;
-        public string stringNow;
+        public int arrione;
+        public int arritwo;
+        public int arrithr;
+        public int arrifou;
+        public int arrifiv;
+        public int arrisix;
+        public int nowone;
+        public int nowtwo;
+        public int nowthr;
+        public int nowfou;
+        public int nowfiv;
+        public int nowsix;
         //共有メモリ
         //MemoryMappedFileViewAccessor sendtounity;
 
@@ -35,7 +46,7 @@ namespace MetroDrive
         {
             power = Native.Handles.Power.Notch;
             brake = Native.Handles.Brake.Notch;
-
+            //timeDraw.now = ;
             //Life life = new Life();
             //life.OnStart();
             //Native.BeaconPassed += new BeaconPassedEventHandler(life.BeaconPassed) ;
@@ -63,6 +74,28 @@ namespace MetroDrive
             Model b7 = CreateBrakeModel("7");
             Model b8 = CreateBrakeModel("8");
             Model eb = CreateBrakeModel("9");
+            //時間系(arri)
+            Model a0 = CreateTimeModel("arrive", 0, 0, 0);//SetTransformで横の位置は変更するゾ
+            Model a1 = CreateTimeModel("arrive", 1, 0, 0);
+            Model a2 = CreateTimeModel("arrive", 2, 0, 0);
+            Model a3 = CreateTimeModel("arrive", 3, 0, 0);
+            Model a4 = CreateTimeModel("arrive", 4, 0, 0);
+            Model a5 = CreateTimeModel("arrive", 5, 0, 0);
+            Model a6 = CreateTimeModel("arrive" ,6, 0, 0);
+            Model a7 = CreateTimeModel("arrive", 7, 0, 0);
+            Model a8 = CreateTimeModel("arrive", 8, 0, 0);
+            Model a9 = CreateTimeModel("arrive", 9, 0, 0);
+            //(now)
+            Model n0 = CreateTimeModel("now", 0, 0, 0);
+            Model n1 = CreateTimeModel("now", 1, 0, 0);
+            Model n2 = CreateTimeModel("now", 2, 0, 0);
+            Model n3 = CreateTimeModel("now", 3, 0, 0);
+            Model n4 = CreateTimeModel("now", 4, 0, 0);
+            Model n5 = CreateTimeModel("now", 5, 0, 0);
+            Model n6 = CreateTimeModel("now", 6, 0, 0);
+            Model n7 = CreateTimeModel("now", 7, 0, 0);
+            Model n8 = CreateTimeModel("now", 8, 0, 0);
+            Model n9 = CreateTimeModel("now", 9, 0, 0);
             //固定UI
             Model arv = CreateArvModel();
 
@@ -91,7 +124,139 @@ namespace MetroDrive
                 if (brake == 7) { b7.Draw(Direct3DProvider.Instance, false); }
                 if (brake == 8) { b8.Draw(Direct3DProvider.Instance, false); }
                 if (brake == Native.Handles.Brake.EmergencyBrakeNotch) { eb.Draw(Direct3DProvider.Instance, false); }
-                arv.Draw(Direct3DProvider.Instance, false); 
+                arv.Draw(Direct3DProvider.Instance, false);
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2, height / 2, 0));//arrive１個目
+                if (arrione == 0) { a0.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == 1) { a1.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == 2) { a2.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == 3) { a3.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == 4) { a4.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == 5) { a5.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == 6) { a6.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == 7) { a7.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == 8) { a8.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == 9) { a9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2, height / 2, 0));//arrive２個め
+                if (arritwo == 0) { a0.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == 1) { a1.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == 2) { a2.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == 3) { a3.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == 4) { a4.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == 5) { a5.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == 6) { a6.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == 7) { a7.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == 8) { a8.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == 9) { a9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2, height / 2, 0));//arrive３個目
+                if (arrithr == 0) { a0.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == 1) { a1.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == 2) { a2.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == 3) { a3.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == 4) { a4.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == 5) { a5.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == 6) { a6.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == 7) { a7.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == 8) { a8.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == 9) { a9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2, height / 2, 0));//now
+                if (arrifou == 0) { a0.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == 1) { a1.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == 2) { a2.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == 3) { a3.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == 4) { a4.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == 5) { a5.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == 6) { a6.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == 7) { a7.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == 8) { a8.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == 9) { a9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2, height / 2, 0));//now
+                if (arrifiv == 0) { a0.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == 1) { a1.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == 2) { a2.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == 3) { a3.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == 4) { a4.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == 5) { a5.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == 6) { a6.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == 7) { a7.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == 8) { a8.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == 9) { a9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2, height / 2, 0));//now
+                if (arrisix == 0) { a0.Draw(Direct3DProvider.Instance, false); }
+                if (arrisix == 1) { a1.Draw(Direct3DProvider.Instance, false); }
+                if (arrisix == 2) { a2.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == 3) { a3.Draw(Direct3DProvider.Instance, false); }
+                if (arrisix == 4) { a4.Draw(Direct3DProvider.Instance, false); }
+                if (arrisix == 5) { a5.Draw(Direct3DProvider.Instance, false); }
+                if (arrisix == 6) { a6.Draw(Direct3DProvider.Instance, false); }
+                if (arrisix == 7) { a7.Draw(Direct3DProvider.Instance, false); }
+                if (arrisix == 8) { a8.Draw(Direct3DProvider.Instance, false); }
+                if (arrisix == 9) { a9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2, height / 2, 0));//now
+                if (nowone == 0) { a0.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == 1) { a1.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == 2) { a2.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == 3) { a3.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == 4) { a4.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == 5) { a5.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == 6) { a6.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == 7) { a7.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == 8) { a8.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == 9) { a9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2, height / 2, 0));//now
+                if (nowtwo == 0) { a0.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == 1) { a1.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == 2) { a2.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == 3) { a3.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == 4) { a4.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == 5) { a5.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == 6) { a6.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == 7) { a7.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == 8) { a8.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == 9) { a9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2, height / 2, 0));//now
+                if (nowthr == 0) { a0.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == 1) { a1.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == 2) { a2.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == 3) { a3.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == 4) { a4.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == 5) { a5.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == 6) { a6.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == 7) { a7.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == 8) { a8.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == 9) { a9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2, height / 2, 0));//now
+                if (nowfou == 0) { a0.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == 1) { a1.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == 2) { a2.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == 3) { a3.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == 4) { a4.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == 5) { a5.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == 6) { a6.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == 7) { a7.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == 8) { a8.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == 9) { a9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2, height / 2, 0));//now
+                if (nowfiv == 0) { a0.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == 1) { a1.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == 2) { a2.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == 3) { a3.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == 4) { a4.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == 5) { a5.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == 6) { a6.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == 7) { a7.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == 8) { a8.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == 9) { a9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2, height / 2, 0));//now
+                if (nowsix == 0) { a0.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == 1) { a1.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == 2) { a2.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == 3) { a3.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == 4) { a4.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == 5) { a5.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == 6) { a6.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == 7) { a7.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == 8) { a8.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == 9) { a9.Draw(Direct3DProvider.Instance, false); }
                 return PatchInvokationResult.DoNothing(e);
             };
             Model CreatePowerModel(string notch)
@@ -118,6 +283,15 @@ namespace MetroDrive
                 Model brakeNotch = Model.CreateRectangleWithTexture(rectangleF, 0, 0, texFilePath);//四角形の3Dモデル
                 return brakeNotch;
             }
+            Model CreateTimeModel(string type,int number,float x,float y)//第一引数にはarrive/nowで入れる
+            {
+                width = Direct3DProvider.Instance.PresentParameters.BackBufferWidth;
+                height = Direct3DProvider.Instance.PresentParameters.BackBufferHeight;
+                string texFilePath = Path.Combine(Path.GetDirectoryName(Location), @"picture\"+type+@"\"+number+".png");
+                RectangleF rectangleF = new RectangleF(-width-x / 4, -height-y / 2, 180, -100);
+                Model timeModel = Model.CreateRectangleWithTexture(rectangleF, 0, 0, texFilePath);//四角形の3Dモデル
+                return timeModel;
+            }
             
         }
         public override void Dispose()
@@ -128,6 +302,20 @@ namespace MetroDrive
         }
         public override TickResult Tick(TimeSpan elapsed)
         {
+            TimeDraw timeDraw = new TimeDraw();
+            timeDraw.now = BveHacker.Scenario.TimeManager.Time.ToString("hhmmss");
+            arrione = timeDraw.arrive[0];
+            arritwo = timeDraw.arrive[1];
+            arrithr = timeDraw.arrive[2];
+            arrifou = timeDraw.arrive[3];
+            arrifiv = timeDraw.arrive[4];
+            arrisix = timeDraw.arrive[5];
+            nowone = timeDraw.now[0];
+            nowtwo = timeDraw.now[1];
+            nowthr = timeDraw.now[2];
+            nowfou = timeDraw.now[3]; 
+            nowfiv = timeDraw.now[4];
+            nowsix = timeDraw.now[5];
             Life life = new Life();
             //int lifetime = life.life;
             index = BveHacker.Scenario.Route.Stations.CurrentIndex + 1;//Index
