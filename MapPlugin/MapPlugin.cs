@@ -11,7 +11,7 @@ using SlimDX.Direct3D9;
 
 namespace MetroDrive
 {
-    [PluginAttribute(PluginType.MapPlugin)]
+    [Plugin(PluginType.MapPlugin)]
     internal class MapPluginMain : AssemblyPluginBase
     {
         public double speed;
@@ -98,7 +98,7 @@ namespace MetroDrive
             Model n9 = CreateTimeModel("now", 9, 0, 0);
             //固定UI
             Model arv = CreateArvModel();
-
+            Model now = CreateNowModel();
             drawPatch.Invoked += (sender, e) =>
             {
                 width = Direct3DProvider.Instance.PresentParameters.BackBufferWidth;
@@ -278,7 +278,7 @@ namespace MetroDrive
             {
                 width = Direct3DProvider.Instance.PresentParameters.BackBufferWidth;
                 height = Direct3DProvider.Instance.PresentParameters.BackBufferHeight;
-                string texFilePath = Path.Combine(Path.GetDirectoryName(Location), @"picture\arrive\base.png");
+                string texFilePath = Path.Combine(Path.GetDirectoryName(Location), @"picture\arrive\arv.png");
                 RectangleF rectangleF = new RectangleF(-width/4,  -height/ 2, 180, -100);
                 Model brakeNotch = Model.CreateRectangleWithTexture(rectangleF, 0, 0, texFilePath);//四角形の3Dモデル
                 return brakeNotch;
@@ -291,6 +291,15 @@ namespace MetroDrive
                 RectangleF rectangleF = new RectangleF(-width-x / 4, -height-y / 2, 180, -100);
                 Model timeModel = Model.CreateRectangleWithTexture(rectangleF, 0, 0, texFilePath);//四角形の3Dモデル
                 return timeModel;
+            }
+            Model CreateNowModel()
+            {
+                width = Direct3DProvider.Instance.PresentParameters.BackBufferWidth;
+                height = Direct3DProvider.Instance.PresentParameters.BackBufferHeight;
+                string texFilePath = Path.Combine(Path.GetDirectoryName(Location), @"picture\now\now.png");
+                RectangleF rectangleF = new RectangleF(-width / 4, -height / 2, 180, -100);
+                Model brakeNotch = Model.CreateRectangleWithTexture(rectangleF, 0, 0, texFilePath);//四角形の3Dモデル
+                return brakeNotch;
             }
             
         }
