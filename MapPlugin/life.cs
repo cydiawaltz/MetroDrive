@@ -1,60 +1,52 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using AtsEx.PluginHost.Native;
-using AtsEx.PluginHost.Plugins;
 using System.Threading.Tasks;
-using System.Threading;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace MetroDrive
 {
     internal class Life
     {
-        /*
+        
         //級数によって変更
         //減点
-        int overatc;
+        public int overatc;
         public bool overatcset;//速度超過時に音にする
-        int overtime;//時間超過時は警告表示を出さず、文字の色のみ
-        int restart;
+        public int overtime;//時間超過時は警告表示を出さず、文字の色
         public bool restartset;//再加速時
-        int EBbrake;
-        int EB;
+        public int restart;
+        public int EBbrake;
+        public int EB;
         public bool EBbrakeset;
-        int EBstop;
+        public int EBstop;
         public bool EBstopset;//駅構内でEBを使用したとき
         //加点
-        int teitu;
+        public int teitu;
         public bool teituset;//定通時
-        int good;
+        public int good;
         public bool goodset;//good
-        int grate;
-        public bool grateset;//grate
-        int bonus;
+        public int great;
+        public bool greatset;//grate
+        public int bonus;
         public bool bonusset;//ボーナス（各死刑的）
         public int life;
         //その他
-        int GoukakuHani;
+        public int GoukakuHani;
         public int lifetime;
         //以下同じ
-        int atc;
-        bool HideHorn;
+        public int atc;
+        public bool HideHorn;
         //以下Mainから取得
-        double speed;
-        int arrive;
-        int power;
-        int brake;
-        int index;
-        int now;
-        bool pass;
-        double NowLocation;
-        double NeXTLocation;
+        public double speed;
+        public int arrive;
+        public int power;
+        public int brake;
+        public int index;
+        public int nowMilli;
+        public bool pass;
+        public double nowLocation;
+        public double NeXTLocation;
         public void OnStart()//初期化
         {
-            
             //難しさごとに変更（現在:初級）
             life = 30;
             //減点
@@ -69,12 +61,12 @@ namespace MetroDrive
             EBstopset = false;
             teituset = false;
             goodset = false;
-            grateset = false;
+            greatset = false;
             EB = 8;//EBとして認識する値
             //加点
             teitu = 3;//定通
             good = 3;//Good停車
-            grate = 5;//Grate!停車
+            great = 5;//Grate!停車
             bonus = 2;//ボーナス
             //その他
             GoukakuHani = 4;//合格範囲
@@ -118,15 +110,6 @@ namespace MetroDrive
         }
         public void Update()//毎フレーム呼び出す
         {
-            MapPluginMain mapPluginMain;
-            speed = mapPluginMain.speed;
-            arrive = mapPluginMain.arrive;
-            pass = mapPluginMain.pass;
-            power = mapPluginMain.power;
-            brake = mapPluginMain.brake;
-            index = mapPluginMain.index;
-            NowLocation = mapPluginMain.NowLocation;
-            NeXTLocation = mapPluginMain.NeXTLocation;
             //ATC超過
             if(speed < atc && brake == 0) 
             {
@@ -140,89 +123,77 @@ namespace MetroDrive
             if(pass == false)
             {
                 //範囲外
-                if(Math.Abs(NowLocation - NeXTLocation)>GoukakuHani )
+                if(Math.Abs(nowLocation - NeXTLocation)>GoukakuHani )
                 {
                     life -= overtime;//５秒以上遅れたら１秒ごとに減点
-                    Delay();
+                    Delay(1000);
                 }
                 //範囲内かつ停車していない
-                if(Math.Abs(NowLocation - NeXTLocation)<GoukakuHani && speed>0)
+                if(Math.Abs(nowLocation - NeXTLocation)<GoukakuHani && speed>0)
                 {
                     life-= overtime;
-                    Delay();
+                    Delay(1000);
                 }
             }
             else
             {
-                if(arrive - now >5000 && NeXTLocation > NowLocation)
+                if(arrive - nowMilli >5000 && NeXTLocation > nowLocation)
                 {
                     life -= overtime;
-                    Delay();
+                    Delay(1000);
                 }
-                if(Math.Abs(arrive - now)<1000 && NeXTLocation == NowLocation)
+                if(Math.Abs(arrive - nowMilli)<1000 && NeXTLocation == nowLocation)
                 {
                     life += teitu;
-                    Delay();
+                    Delay(1000);
                 }
             }
-            if(brake == mapPluginMain.EB)//非常制動
+            if(brake == EB)//非常制動
             {
                 EBbrakeset =true;
                 life -= EBbrake;
-                Delay();
+                Delay(2000);
                 EBbrakeset = false;
             }
             //*good!/if(Math.Abs(NowLocation - NeXTLocation)<0.5 && speed == 0.1)
             {
                 life += good;
                 goodset = true;
-                while(i=2)//2秒表示
-                {
-                    Delay();
-                    i+=1;
-                }
+                Delay(2000);
                 goodset = false;
             }
             //*great!/if(Math.Abs(NowLocation - NeXTLocation)<0.5 && speed == 0.1 && Math.Abs(now - arrive))
             {
                 life += great;
-                grateset = true;
-                for(i=2)
-                {
-                    Delay();
-                    i+=1;
-                }
-                grateset = false;
+                greatset = true;
+                Delay(2000);
+                greatset = false;
             }
             //オーバーラン
-            if (nowlocation > GoukakuHani + NeXTLocation)//過走時
+            if (nowLocation > GoukakuHani + NeXTLocation)//過走時
             {
                 if (speed == 0)
                 {
-                    int overrun = Convert.ToInt32(nowlocation - NeXTLocation);
+                    int overrun = Convert.ToInt32(nowLocation - NeXTLocation);
                     life -= overrun;
-                    for(i=5)
-                    {
-                        Delay();
-                        i+=1;
-                    }
+                    Delay(5000);
                 }
             }
         }
-        static async void Delay()
+        static async void Delay(int e)
         {
-            await Task.Delay(1000);
+            await Task.Delay(e);
             return;
         }
         void OnHorn()//警笛イベントのときに呼ばれる
         {
-            if(HideHorn = true)//警笛ボーナス
+            if(HideHorn == true)//警笛ボーナス
             {
                 life += bonus;
                 bonusset = true;
-                Delay();
+                Delay(1000);
                 bonusset = false;
             }
-        }*/
+        }
     }
 }
