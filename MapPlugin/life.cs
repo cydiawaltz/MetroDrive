@@ -42,6 +42,7 @@ namespace MetroDrive
         public int brake;
         public int index;
         public int nowMilli;
+        public int passMilli;
         public bool pass;
         public double nowLocation;
         public double NeXTLocation;
@@ -62,7 +63,6 @@ namespace MetroDrive
             teituset = false;
             goodset = false;
             greatset = false;
-            EB = 8;//EBとして認識する値
             //加点
             teitu = 3;//定通
             good = 3;//Good停車
@@ -105,7 +105,7 @@ namespace MetroDrive
                     break;
                 case 901://隠し警笛終了
                     HideHorn = false;
-                    break;
+                break;
             }
         }
         public void Update()//毎フレーム呼び出す
