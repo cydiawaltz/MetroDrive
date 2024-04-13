@@ -28,7 +28,7 @@ namespace MetroDrive
         public Model b7;
         public Model b8;
         public Model eb;
-        public void CreateModel()
+        public void CreateModel(string Location)
         {
             TimeDrawer timeDrawer = new TimeDrawer();
             p0 = CreatePowerModel("0");
@@ -49,43 +49,42 @@ namespace MetroDrive
             eb = CreateBrakeModel("9");
             Model CreatePowerModel(string notch)
             {
-                string texFilePath = Path.Combine(Path.GetDirectoryName(timeDrawer.Location), @"picture\P" + notch + ".png");
+                string texFilePath = Path.Combine(Path.GetDirectoryName(Location), @"picture\P" + notch + ".png");
                 RectangleF rectangleF = new RectangleF(0 / 2, 0 / 2, 150, -225);
                 Model powerNotch = Model.CreateRectangleWithTexture(rectangleF, 0, 0, texFilePath);//四角形の3Dモデル
                 return powerNotch;
             }
             Model CreateBrakeModel(string notch)
             { 
-                string texFilePath = Path.Combine(Path.GetDirectoryName(timeDrawer.Location), @"picture\B" + notch + ".png");
+                string texFilePath = Path.Combine(Path.GetDirectoryName(Location), @"picture\B" + notch + ".png");
                 RectangleF rectangleF = new RectangleF(-150, 0 / 2, 150, -225);
                 Model brakeNotch = Model.CreateRectangleWithTexture(rectangleF, 0, 0, texFilePath);//四角形の3Dモデル
                 return brakeNotch;
             }
         }
-        public void UIDraw()
+        public void UIDraw(int power,int brake,int EB)
         {
-            Life life = new Life();
             TimeDrawer timeDrawer = new TimeDrawer();
             int width = Direct3DProvider.Instance.PresentParameters.BackBufferWidth;
             int height = Direct3DProvider.Instance.PresentParameters.BackBufferHeight;
             Device device = Direct3DProvider.Instance.Device;
             device.SetTransform(TransformState.World, Matrix.Translation(-width / 2, height / 2, 0));
-            if (life.power == 0) { p0.Draw(Direct3DProvider.Instance, false); }
-            if (life.power == 1) { p1.Draw(Direct3DProvider.Instance, false); }
-            if (life.power == 2) { p2.Draw(Direct3DProvider.Instance, false); }
-            if (life.power == 3) { p3.Draw(Direct3DProvider.Instance, false); }
-            if (life.power == 4) { p4.Draw(Direct3DProvider.Instance, false); }
+            if (power == 0) { p0.Draw(Direct3DProvider.Instance, false); }
+            if (power == 1) { p1.Draw(Direct3DProvider.Instance, false); }
+            if (power == 2) { p2.Draw(Direct3DProvider.Instance, false); }
+            if (power == 3) { p3.Draw(Direct3DProvider.Instance, false); }
+            if (power == 4) { p4.Draw(Direct3DProvider.Instance, false); }
             device.SetTransform(TransformState.World, Matrix.Translation(width / 2, height / 2, 0));//(float)Math.Sin(Native.VehicleState.Time.TotalSeconds)*100
-            if (life.brake == 0) { b0.Draw(Direct3DProvider.Instance, false); }
-            if (life.brake == 1) { b1.Draw(Direct3DProvider.Instance, false); }
-            if (life.brake == 2) { b2.Draw(Direct3DProvider.Instance, false); }
-            if (life.brake == 3) { b3.Draw(Direct3DProvider.Instance, false); }
-            if (life.brake == 4) { b4.Draw(Direct3DProvider.Instance, false); }
-            if (life.brake == 5) { b5.Draw(Direct3DProvider.Instance, false); }
-            if (life.brake == 6) { b6.Draw(Direct3DProvider.Instance, false); }
-            if (life.brake == 7) { b7.Draw(Direct3DProvider.Instance, false); }
-            if (life.brake == 8) { b8.Draw(Direct3DProvider.Instance, false); }
-            if (life.brake == life.EB) { eb.Draw(Direct3DProvider.Instance, false); }
+            if (brake == 0) { b0.Draw(Direct3DProvider.Instance, false); }
+            if (brake == 1) { b1.Draw(Direct3DProvider.Instance, false); }
+            if (brake == 2) { b2.Draw(Direct3DProvider.Instance, false); }
+            if (brake == 3) { b3.Draw(Direct3DProvider.Instance, false); }
+            if (brake == 4) { b4.Draw(Direct3DProvider.Instance, false); }
+            if (brake == 5) { b5.Draw(Direct3DProvider.Instance, false); }
+            if (brake == 6) { b6.Draw(Direct3DProvider.Instance, false); }
+            if (brake == 7) { b7.Draw(Direct3DProvider.Instance, false); }
+            if (brake == 8) { b8.Draw(Direct3DProvider.Instance, false); }
+            if (brake == EB) { eb.Draw(Direct3DProvider.Instance, false); }
         }
     }
 

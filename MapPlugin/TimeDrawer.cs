@@ -8,12 +8,14 @@ using System.IO;
 using System.Drawing;
 using SlimDX;
 using SlimDX.Direct3D9;
+using AtsEx.PluginHost;
+using System.Reflection;
 
 namespace MetroDrive
 {
     internal class TimeDrawer//このクラスでは、
     {
-        public string Location;
+        //public string Location;
         public string now;
         public string arrive;
         public float width;
@@ -71,8 +73,8 @@ namespace MetroDrive
         public Model nowColon;
         public Model ato;
         public Model meter;
-
-        public void CreateModel()//Mainの中で呼び出すやつ
+        public int index;
+        public void CreateModel(string Location)//Mainの中で呼び出すやつ
         {
             //string testTexPath = Path.Combine(Path.GetDirectoryName(Location),@"picture\aaa.jpg");//DLLが入っているフォルダまで
             //Model test = Model.CreateRectangleWithTexture(rectangleF, 0, 0,testTexPath);//四角形の3Dモデル
@@ -146,9 +148,8 @@ namespace MetroDrive
                 return brakeNotch;
             }
         }
-        public void Patch()//まずこれを呼ぶ
+        public void Patch(double NeXTLocation,double nowLocation)//まずこれを呼ぶ
         {
-            Life life = new Life();
             width = Direct3DProvider.Instance.PresentParameters.BackBufferWidth;
             height = Direct3DProvider.Instance.PresentParameters.BackBufferHeight;
             //3D modelをどこに配置するのか指定するかんじ device.settransform(文字略) 頂点位置の変換
@@ -304,7 +305,7 @@ namespace MetroDrive
             meter.Draw(Direct3DProvider.Instance, false);
             device.SetTransform(TransformState.World, Matrix.Translation(width / 2, -height / 4, 0));
             ato.Draw(Direct3DProvider.Instance, false);
-            if (Math.Abs(life.NeXTLocation - life.nowLocation) >= 1000)
+            if (Math.Abs(NeXTLocation - nowLocation) >= 1000)
             {
                 device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, height / 4, 0));
                 if (nextone == "0") { r0.Draw(Direct3DProvider.Instance, false); }
@@ -351,7 +352,7 @@ namespace MetroDrive
                 if (nextfou == "8") { r8.Draw(Direct3DProvider.Instance, false); }
                 if (nextfou == "9") { r9.Draw(Direct3DProvider.Instance, false); }
             }
-            if (Math.Abs(life.NeXTLocation - life.nowLocation) < 1000 && Math.Abs(life.NeXTLocation - life.nowLocation) >= 100)
+            if (Math.Abs(NeXTLocation - nowLocation) < 1000 && Math.Abs(NeXTLocation - nowLocation) >= 100)
             {
                 device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, height / 4, 0));
                 if (nextone == "0") { r0.Draw(Direct3DProvider.Instance, false); }
@@ -387,7 +388,7 @@ namespace MetroDrive
                 if (nextthr == "8") { r8.Draw(Direct3DProvider.Instance, false); }
                 if (nextthr == "9") { r9.Draw(Direct3DProvider.Instance, false); }
             }
-            if (Math.Abs(life.NeXTLocation - life.nowLocation) < 100 && Math.Abs(life.NeXTLocation - life.nowLocation) >= 10)
+            if (Math.Abs(NeXTLocation - nowLocation) < 100 && Math.Abs(NeXTLocation - nowLocation) >= 10)
             {
                 device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, height / 4, 0));
                 if (nextone == "0") { r0.Draw(Direct3DProvider.Instance, false); }
@@ -412,7 +413,7 @@ namespace MetroDrive
                 if (nexttwo == "8") { r8.Draw(Direct3DProvider.Instance, false); }
                 if (nexttwo == "9") { r9.Draw(Direct3DProvider.Instance, false); }
             }
-            if (Math.Abs(life.NeXTLocation - life.nowLocation) < 10)
+            if (Math.Abs(NeXTLocation - nowLocation) < 10)
             {
                 device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, height / 4, 0));
                 if (nextone == "0") { r0.Draw(Direct3DProvider.Instance, false); }
@@ -429,6 +430,30 @@ namespace MetroDrive
         }
         //0~9.:を読み込む（pと同じ）
         //Native.VehicleState.Timeから
-       
+        public TickResult Tick(int index,string now,double NeXTLocation,double nowLocation,string arrive)
+        {
+            //var station = BveHacker.Scenario.Route.Stations[index] as Station;
+            //arrive = station.DepartureTime.ToString("hhmmss");
+            //now = BveHacker.Scenario.TimeManager.Time.ToString("hhmmss");
+            arrione = arrive.Substring(0, 1);
+            arritwo = arrive.Substring(1, 1);
+            arrithr = arrive.Substring(2, 1);
+            arrifou = arrive.Substring(3, 1);
+            arrifiv = arrive.Substring(4, 1);
+            arrisix = arrive.Substring(5, 1);
+            nowone = now.Substring(0, 1);
+            nowtwo = now.Substring(1, 1);
+            nowthr = now.Substring(2, 1);
+            nowfou = now.Substring(3, 1);
+            nowfiv = now.Substring(4, 1);
+            nowsix = now.Substring(5, 1);
+            next = Convert.ToInt32(NeXTLocation - nowLocation).ToString();
+            nextone = next[0].ToString();
+            if (NeXTLocation - nowLocation >= 10) { nexttwo = next[1].ToString(); }
+            if (NeXTLocation - nowLocation >= 100) { nextthr = next[2].ToString(); }
+            if (NeXTLocation - nowLocation >= 1000) { nextfou = next[3].ToString(); }
+            else { nextfou = "nothing"; }
+            return new MapPluginTickResult();
+        }
     }
 }
