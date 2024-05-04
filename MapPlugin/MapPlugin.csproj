@@ -22,4 +22,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Mackoy.IInputDevice">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\mackoy\BveTs5\Mackoy.IInputDevice.DLL</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -1,5 +1,4 @@
 ﻿using System;
-using AtsEx.PluginHost.Native;
 using System.Threading.Tasks;
 
 namespace MetroDrive
@@ -10,59 +9,82 @@ namespace MetroDrive
         //級数によって変更
         //減点
         public int overatc;
-        public bool overatcset;//速度超過時に音にする
+        public bool isOveratc;//速度超過時に音にする
         public int overtime;//時間超過時は警告表示を出さず、文字の色
-        public bool restartset;//再加速時
+        public bool isRestart;//再加速時
         public int restart;
         public int EBbrake;
-        public int EB;
-        public bool EBbrakeset;
+        //public int EB;
+        public bool isEBbrake;
         public int EBstop;
-        public bool EBstopset;//駅構内でEBを使用したとき
+        public bool isEBStop;//駅構内でEBを使用したとき
         //加点
         public int teitu;
-        public bool teituset;//定通時
+        public bool isTeituu;//定通時
         public int good;
-        public bool goodset;//good
+        public bool isGood;//good
         public int great;
-        public bool greatset;//grate
+        public bool isGreat;//grate
         public int bonus;
-        public bool bonusset;//ボーナス（各死刑的）
+        public bool isBonus;//ボーナス（各死刑的）
         public int life;
         //その他
         public int GoukakuHani;
-        public int lifetime;
         //以下同じ
         public int atc;
         public bool HideHorn;
-        //以下Mainから取得
-        public double speed;
-        public int arrive;
-        public int power;
-        public int brake;
-        public int index;
-        public int nowMilli;
-        public int passMilli;
-        public bool pass;
-        public double nowLocation;
-        public double NeXTLocation;
-        public void OnStart()//初期化
+        public void OnStartFreeRun()//初期化
         {
             //難しさごとに変更（現在:初級）
-            life = 30;
+            life = 999;
+            //減点
+            overatc = 0;//予告無視
+            overtime = 0;//時間超過（一秒おき）
+            restart = 0;//駅構内再加速
+            EBbrake = 0;//非常ブレーキ
+            EBstop = 0;//非常聖堂停車
+            //加点
+            teitu = 0;//定通
+            good = 0;//Good停車
+            great = 0;//Grate!停車
+            bonus = 0;//ボーナス
+            //その他
+            GoukakuHani = 200;//合格範囲
+            //以下共通設定
+            atc = 110;
+            HideHorn = false;
+        }
+        public void OnStartElement()//初期化
+        {
+            //難しさごとに変更（現在:初級）
+            life = 999;
+            //減点
+            overatc = 0;//予告無視
+            overtime = 0;//時間超過（一秒おき）
+            restart = 0;//駅構内再加速
+            EBbrake = 0;//非常ブレーキ
+            EBstop = 0;//非常聖堂停車
+            //加点
+            teitu = 0;//定通
+            good = 0;//Good停車
+            great = 0;//Grate!停車
+            bonus = 0;//ボーナス
+            //その他
+            GoukakuHani = 8;//合格範
+            //以下共通設定
+            atc = 110;
+            HideHorn = false;
+        }
+        public void OnStartEasy()//初期化
+        {
+            //難しさごとに変更（現在:初級）
+            life = 50;
             //減点
             overatc = 2;//予告無視
             overtime = 1;//時間超過（一秒おき）
             restart = 5;//駅構内再加速
             EBbrake = 5;//非常ブレーキ
             EBstop = 5;//非常聖堂停車
-            overatcset = false;
-            restartset = false;
-            EBbrakeset = false;
-            EBstopset = false;
-            teituset = false;
-            goodset = false;
-            greatset = false;
             //加点
             teitu = 3;//定通
             good = 3;//Good停車
@@ -70,57 +92,136 @@ namespace MetroDrive
             bonus = 2;//ボーナス
             //その他
             GoukakuHani = 4;//合格範囲
-            lifetime = 30;//初期持ち時間
+            //以下共通設定
+            atc = 110;
+            HideHorn = false;
+        }
+        public void OnStartNormal()//初期化
+        {
+            //難しさごとに変更（現在:初級）
+            life = 40;
+            //減点
+            overatc = 4;//予告無視
+            overtime = 1;//時間超過（一秒おき）
+            restart = 5;//駅構内再加速
+            EBbrake = 10;//非常ブレーキ
+            EBstop = 10;//非常聖堂停車
+            //加点
+            teitu = 5;//定通
+            good = 3;//Good停車
+            great = 5;//Grate!停車
+            bonus = 2;//ボーナス
+            //その他
+            GoukakuHani = 2;//合格範囲
+            //以下共通設定
+            atc = 110;
+            HideHorn = false;
+        }
+        public void OnStartHard()//初期化
+        {
+            //難しさごとに変更（現在:初級）
+            life = 30;
+            //減点
+            overatc = 4;//予告無視
+            overtime = 2;//時間超過（一秒おき）
+            restart = 5;//駅構内再加速
+            EBbrake = 5;//非常ブレーキ
+            EBstop = 5;//非常聖堂停車
+            //加点
+            teitu = 3;//定通
+            good = 3;//Good停車
+            great = 5;//Grate!停車
+            bonus = 2;//ボーナス
+            //その他
+            GoukakuHani = 4;//合格範囲
             //以下共通設定
             atc = 80;
             HideHorn = false;
         }
-        public void BeaconPassed(BeaconPassedEventArgs e)
+        public void OnStartVeryHard()//初期化
         {
-            switch (e.Type)
-            {
-                case 10://信号0
-                    atc = 0;
-                    break;
-                case 18://ATC信号40
-                    atc = 40;
-                    break;
-                case 19://ATC45
-                    atc = 45;
-                    break;
-                case 21://ATC55
-                    atc = 55;
-                    break;
-                case 23: //ATC65
-                    atc = 65;
-                    break;
-                case 25://ATC75
-                    atc = 75;
-                    break;
-                case 26://Atc80
-                    atc = 80;
-                    break;
-                case 900://隠し警笛開始
-                    HideHorn = true;
-                    break;
-                case 901://隠し警笛終了
-                    HideHorn = false;
-                break;
-            }
+            //難しさごとに変更（現在:初級）
+            life = 10;
+            //減点
+            overatc = 5;//予告無視
+            overtime = 3;//時間超過（一秒おき）
+            restart = 15;//駅構内再加速
+            EBbrake = 10;//非常ブレーキ
+            EBstop = 10;//非常聖堂停車
+            //加点
+            teitu = 2;//定通
+            good = 2;//Good停車
+            great = 3;//Grate!停車
+            bonus = 1;//ボーナス
+            //その他
+            GoukakuHani = 1;//合格範囲
+            //以下共通設定
+            atc = 110;
+            HideHorn = false;
         }
-        public void Update()//毎フレーム呼び出す
+
+        public void NewUpdate(bool isOverATC, bool isDelay, bool isEB, bool isTeituu, bool isGood, bool isGreat, bool isEBStop, bool isOverRun, double nowLocation, double NeXTLocation, bool isRestart)
         {
-            //ATC超過
-            if(speed < atc && brake == 0) 
+            if (isOverATC == true)
             {
                 life -= overatc;
-                bool overatcset = true;
+                isOverATC = false;
+            }
+            if (isDelay == true)
+            {
+                life -= overtime;
+                isDelay = false;
+            }
+            if (isEB == true)
+            {
+                life -= EBbrake;
+                isEB = false;
+            }
+            if (isTeituu == true)
+            {
+                life += teitu;
+                isTeituu = false;
+            }
+            if (isGood == true)
+            {
+                life += good;
+                isGood = false;
+            }
+            if (isGreat == true)
+            {
+                life += great;
+                isGreat = false;
+            }
+            if (isEBStop == true)
+            {
+                life -= EBstop;
+                isEBStop = false;
+            }
+            if (isOverRun == true)
+            {
+                int overrun = Convert.ToInt32(nowLocation - NeXTLocation);
+                life -= overrun;
+                isOverRun = false;
+            }
+            if (isRestart == true)
+            {
+                life -= restart;
+                isRestart = false;
+            }
+        }
+        public void Update(double speed,int power,int brake,double nowLocation,double NeXTLocation,bool pass,int arriveMilli,int nowMilli,int EB)//毎フレーム呼び出す
+        {
+            //ATC超過
+            if(speed < atc && power > 0) 
+            {
+                life -= overatc;
+                isOveratc = true;
             }
             else{
-                bool overatcset = false;
+                isOveratc = false;
             }
             //遅れ
-            if(pass == false)
+            if(pass == false && nowMilli - arriveMilli >0)
             {
                 //範囲外
                 if(Math.Abs(nowLocation - NeXTLocation)>GoukakuHani )
@@ -137,37 +238,38 @@ namespace MetroDrive
             }
             else
             {
-                if(arrive - nowMilli >5000 && NeXTLocation > nowLocation)
+                if(arriveMilli - nowMilli >5000 && NeXTLocation > nowLocation)
                 {
                     life -= overtime;
                     Delay(1000);
                 }
-                if(Math.Abs(arrive - nowMilli)<1000 && NeXTLocation == nowLocation)
+                if(Math.Abs(arriveMilli - nowMilli)<1000 && NeXTLocation == nowLocation)
                 {
                     life += teitu;
                     Delay(1000);
                 }
             }
-            if(brake == EB)//非常制動
+            if(brake == EB && speed > 5)//非常制動
             {
-                EBbrakeset =true;
+                isEBbrake =true;
                 life -= EBbrake;
                 Delay(2000);
-                EBbrakeset = false;
+                isEBbrake = false;
             }
-            //*good!/if(Math.Abs(NowLocation - NeXTLocation)<0.5 && speed == 0.1)
+            //フラグを設定する
+            if(Math.Abs(nowLocation - NeXTLocation)<0.5 && speed < 0.1 )//Good
             {
                 life += good;
-                goodset = true;
+                isGood = true;
                 Delay(2000);
-                goodset = false;
+                isGood = false;
             }
-            //*great!/if(Math.Abs(NowLocation - NeXTLocation)<0.5 && speed == 0.1 && Math.Abs(now - arrive))
+            if(Math.Abs(nowLocation - NeXTLocation)<0.5 && speed == 0.1 && Math.Abs(nowMilli - arriveMilli)<2000)//Great
             {
                 life += great;
-                greatset = true;
+                isGreat = true;
                 Delay(2000);
-                greatset = false;
+                isGreat = false;
             }
             //オーバーラン
             if (nowLocation > GoukakuHani + NeXTLocation)//過走時
@@ -179,6 +281,8 @@ namespace MetroDrive
                     Delay(5000);
                 }
             }
+            //TEST
+            isTeituu = false;
         }
         static async void Delay(int e)
         {
@@ -190,9 +294,9 @@ namespace MetroDrive
             if(HideHorn == true)//警笛ボーナス
             {
                 life += bonus;
-                bonusset = true;
+                isBonus = true;
                 Delay(1000);
-                bonusset = false;
+                isBonus = false;
             }
         }
     }
