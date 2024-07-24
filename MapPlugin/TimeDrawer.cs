@@ -145,286 +145,290 @@ namespace MetroDrive
                 return brakeNotch;
             }
         }
-        public void Patch(double NeXTLocation,double nowLocation)//まずこれを呼ぶ
+        public void Patch(double NeXTLocation,double nowLocation,bool isUIOff)//まずこれを呼ぶ
         {
-            width = Direct3DProvider.Instance.PresentParameters.BackBufferWidth;
-            height = Direct3DProvider.Instance.PresentParameters.BackBufferHeight;
-            //3D modelをどこに配置するのか指定するかんじ device.settransform(文字略) 頂点位置の変換
-            Device device = Direct3DProvider.Instance.Device;
-            device.SetTransform(TransformState.View, Matrix.Identity);
-            device.SetTransform(TransformState.Projection, Matrix.OrthoOffCenterLH(-width / 2, width / 2, -height / 2, height / 2, 0, 1));
-            
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 450, -height / 4 - 70, 0));
-            arv.Draw(Direct3DProvider.Instance, false);
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 450, -height / 4 + 10, 0));
-            nowModel.Draw(Direct3DProvider.Instance, false);
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 300, -height / 4 - 80, 0));//arrive１個目
-            if (arrione == "0") { a0.Draw(Direct3DProvider.Instance, false); }
-            if (arrione == "1") { a1.Draw(Direct3DProvider.Instance, false); }
-            if (arrione == "2") { a2.Draw(Direct3DProvider.Instance, false); }
-            if (arrione == "3") { a3.Draw(Direct3DProvider.Instance, false); }
-            if (arrione == "4") { a4.Draw(Direct3DProvider.Instance, false); }
-            if (arrione == "5") { a5.Draw(Direct3DProvider.Instance, false); }
-            if (arrione == "6") { a6.Draw(Direct3DProvider.Instance, false); }
-            if (arrione == "7") { a7.Draw(Direct3DProvider.Instance, false); }
-            if (arrione == "8") { a8.Draw(Direct3DProvider.Instance, false); }
-            if (arrione == "9") { a9.Draw(Direct3DProvider.Instance, false); }
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 260, -height / 4 - 80, 0));//arrive２個め
-            if (arritwo == "0") { a0.Draw(Direct3DProvider.Instance, false); }
-            if (arritwo == "1") { a1.Draw(Direct3DProvider.Instance, false); }
-            if (arritwo == "2") { a2.Draw(Direct3DProvider.Instance, false); }
-            if (arritwo == "3") { a3.Draw(Direct3DProvider.Instance, false); }
-            if (arritwo == "4") { a4.Draw(Direct3DProvider.Instance, false); }
-            if (arritwo == "5") { a5.Draw(Direct3DProvider.Instance, false); }
-            if (arritwo == "6") { a6.Draw(Direct3DProvider.Instance, false); }
-            if (arritwo == "7") { a7.Draw(Direct3DProvider.Instance, false); }
-            if (arritwo == "8") { a8.Draw(Direct3DProvider.Instance, false); }
-            if (arritwo == "9") { a9.Draw(Direct3DProvider.Instance, false); }
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 230, -height / 4 - 80, 0));
-            arvColon.Draw(Direct3DProvider.Instance, false);
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 200, -height / 4 - 80, 0));//arrive３個目
-            if (arrithr == "0") { a0.Draw(Direct3DProvider.Instance, false); }
-            if (arrithr == "1") { a1.Draw(Direct3DProvider.Instance, false); }
-            if (arrithr == "2") { a2.Draw(Direct3DProvider.Instance, false); }
-            if (arrithr == "3") { a3.Draw(Direct3DProvider.Instance, false); }
-            if (arrithr == "4") { a4.Draw(Direct3DProvider.Instance, false); }
-            if (arrithr == "5") { a5.Draw(Direct3DProvider.Instance, false); }
-            if (arrithr == "6") { a6.Draw(Direct3DProvider.Instance, false); }
-            if (arrithr == "7") { a7.Draw(Direct3DProvider.Instance, false); }
-            if (arrithr == "8") { a8.Draw(Direct3DProvider.Instance, false); }
-            if (arrithr == "9") { a9.Draw(Direct3DProvider.Instance, false); }
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 160, -height / 4 - 80, 0));//now
-            if (arrifou == "0") { a0.Draw(Direct3DProvider.Instance, false); }
-            if (arrifou == "1") { a1.Draw(Direct3DProvider.Instance, false); }
-            if (arrifou == "2") { a2.Draw(Direct3DProvider.Instance, false); }
-            if (arrifou == "3") { a3.Draw(Direct3DProvider.Instance, false); }
-            if (arrifou == "4") { a4.Draw(Direct3DProvider.Instance, false); }
-            if (arrifou == "5") { a5.Draw(Direct3DProvider.Instance, false); }
-            if (arrifou == "6") { a6.Draw(Direct3DProvider.Instance, false); }
-            if (arrifou == "7") { a7.Draw(Direct3DProvider.Instance, false); }
-            if (arrifou == "8") { a8.Draw(Direct3DProvider.Instance, false); }
-            if (arrifou == "9") { a9.Draw(Direct3DProvider.Instance, false); }
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 130, -height / 4 - 80, 0));//now
-            arvColon.Draw(Direct3DProvider.Instance, false);
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 100, -height / 4 - 80, 0));//now
-            if (arrifiv == "0") { a0.Draw(Direct3DProvider.Instance, false); }
-            if (arrifiv == "1") { a1.Draw(Direct3DProvider.Instance, false); }
-            if (arrifiv == "2") { a2.Draw(Direct3DProvider.Instance, false); }
-            if (arrifiv == "3") { a3.Draw(Direct3DProvider.Instance, false); }
-            if (arrifiv == "4") { a4.Draw(Direct3DProvider.Instance, false); }
-            if (arrifiv == "5") { a5.Draw(Direct3DProvider.Instance, false); }
-            if (arrifiv == "6") { a6.Draw(Direct3DProvider.Instance, false); }
-            if (arrifiv == "7") { a7.Draw(Direct3DProvider.Instance, false); }
-            if (arrifiv == "8") { a8.Draw(Direct3DProvider.Instance, false); }
-            if (arrifiv == "9") { a9.Draw(Direct3DProvider.Instance, false); }
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 60, -height / 4 - 80, 0));//now
-            if (arrisix == "0") { a0.Draw(Direct3DProvider.Instance, false); }
-            if (arrisix == "1") { a1.Draw(Direct3DProvider.Instance, false); }
-            if (arrisix == "2") { a2.Draw(Direct3DProvider.Instance, false); }
-            if (arrifiv == "3") { a3.Draw(Direct3DProvider.Instance, false); }
-            if (arrisix == "4") { a4.Draw(Direct3DProvider.Instance, false); }
-            if (arrisix == "5") { a5.Draw(Direct3DProvider.Instance, false); }
-            if (arrisix == "6") { a6.Draw(Direct3DProvider.Instance, false); }
-            if (arrisix == "7") { a7.Draw(Direct3DProvider.Instance, false); }
-            if (arrisix == "8") { a8.Draw(Direct3DProvider.Instance, false); }
-            if (arrisix == "9") { a9.Draw(Direct3DProvider.Instance, false); }
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 300, -height / 4, 0));//now
-            if (nowone == "0") { n0.Draw(Direct3DProvider.Instance, false); }
-            if (nowone == "1") { n1.Draw(Direct3DProvider.Instance, false); }
-            if (nowone == "2") { n2.Draw(Direct3DProvider.Instance, false); }
-            if (nowone == "3") { n3.Draw(Direct3DProvider.Instance, false); }
-            if (nowone == "4") { n4.Draw(Direct3DProvider.Instance, false); }
-            if (nowone == "5") { n5.Draw(Direct3DProvider.Instance, false); }
-            if (nowone == "6") { n6.Draw(Direct3DProvider.Instance, false); }
-            if (nowone == "7") { n7.Draw(Direct3DProvider.Instance, false); }
-            if (nowone == "8") { n8.Draw(Direct3DProvider.Instance, false); }
-            if (nowone == "9") { n9.Draw(Direct3DProvider.Instance, false); }
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 260, -height / 4, 0));//now
-            if (nowtwo == "0") { n0.Draw(Direct3DProvider.Instance, false); }
-            if (nowtwo == "1") { n1.Draw(Direct3DProvider.Instance, false); }
-            if (nowtwo == "2") { n2.Draw(Direct3DProvider.Instance, false); }
-            if (nowtwo == "3") { n3.Draw(Direct3DProvider.Instance, false); }
-            if (nowtwo == "4") { n4.Draw(Direct3DProvider.Instance, false); }
-            if (nowtwo == "5") { n5.Draw(Direct3DProvider.Instance, false); }
-            if (nowtwo == "6") { n6.Draw(Direct3DProvider.Instance, false); }
-            if (nowtwo == "7") { n7.Draw(Direct3DProvider.Instance, false); }
-            if (nowtwo == "8") { n8.Draw(Direct3DProvider.Instance, false); }
-            if (nowtwo == "9") { n9.Draw(Direct3DProvider.Instance, false); }
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 230, -height / 4, 0));
-            nowColon.Draw(Direct3DProvider.Instance, false);
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 200, -height / 4, 0));//now
-            if (nowthr == "0") { n0.Draw(Direct3DProvider.Instance, false); }
-            if (nowthr == "1") { n1.Draw(Direct3DProvider.Instance, false); }
-            if (nowthr == "2") { n2.Draw(Direct3DProvider.Instance, false); }
-            if (nowthr == "3") { n3.Draw(Direct3DProvider.Instance, false); }
-            if (nowthr == "4") { n4.Draw(Direct3DProvider.Instance, false); }
-            if (nowthr == "5") { n5.Draw(Direct3DProvider.Instance, false); }
-            if (nowthr == "6") { n6.Draw(Direct3DProvider.Instance, false); }
-            if (nowthr == "7") { n7.Draw(Direct3DProvider.Instance, false); }
-            if (nowthr == "8") { n8.Draw(Direct3DProvider.Instance, false); }
-            if (nowthr == "9") { n9.Draw(Direct3DProvider.Instance, false); }
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 160, -height / 4, 0));//now
-            if (nowfou == "0") { n0.Draw(Direct3DProvider.Instance, false); }
-            if (nowfou == "1") { n1.Draw(Direct3DProvider.Instance, false); }
-            if (nowfou == "2") { n2.Draw(Direct3DProvider.Instance, false); }
-            if (nowfou == "3") { n3.Draw(Direct3DProvider.Instance, false); }
-            if (nowfou == "4") { n4.Draw(Direct3DProvider.Instance, false); }
-            if (nowfou == "5") { n5.Draw(Direct3DProvider.Instance, false); }
-            if (nowfou == "6") { n6.Draw(Direct3DProvider.Instance, false); }
-            if (nowfou == "7") { n7.Draw(Direct3DProvider.Instance, false); }
-            if (nowfou == "8") { n8.Draw(Direct3DProvider.Instance, false); }
-            if (nowfou == "9") { n9.Draw(Direct3DProvider.Instance, false); }
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 130, -height / 4, 0));
-            nowColon.Draw(Direct3DProvider.Instance, false);
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 100, -height / 4, 0));//now
-            if (nowfiv == "0") { n0.Draw(Direct3DProvider.Instance, false); }
-            if (nowfiv == "1") { n1.Draw(Direct3DProvider.Instance, false); }
-            if (nowfiv == "2") { n2.Draw(Direct3DProvider.Instance, false); }
-            if (nowfiv == "3") { n3.Draw(Direct3DProvider.Instance, false); }
-            if (nowfiv == "4") { n4.Draw(Direct3DProvider.Instance, false); }
-            if (nowfiv == "5") { n5.Draw(Direct3DProvider.Instance, false); }
-            if (nowfiv == "6") { n6.Draw(Direct3DProvider.Instance, false); }
-            if (nowfiv == "7") { n7.Draw(Direct3DProvider.Instance, false); }
-            if (nowfiv == "8") { n8.Draw(Direct3DProvider.Instance, false); }
-            if (nowfiv == "9") { n9.Draw(Direct3DProvider.Instance, false); }
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 60, -height / 4, 0));//now
-            if (nowsix == "0") { n0.Draw(Direct3DProvider.Instance, false); }
-            if (nowsix == "1") { n1.Draw(Direct3DProvider.Instance, false); }
-            if (nowsix == "2") { n2.Draw(Direct3DProvider.Instance, false); }
-            if (nowsix == "3") { n3.Draw(Direct3DProvider.Instance, false); }
-            if (nowsix == "4") { n4.Draw(Direct3DProvider.Instance, false); }
-            if (nowsix == "5") { n5.Draw(Direct3DProvider.Instance, false); }
-            if (nowsix == "6") { n6.Draw(Direct3DProvider.Instance, false); }
-            if (nowsix == "7") { n7.Draw(Direct3DProvider.Instance, false); }
-            if (nowsix == "8") { n8.Draw(Direct3DProvider.Instance, false); }
-            if (nowsix == "9") { n9.Draw(Direct3DProvider.Instance, false); }
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2, -height / 4, 0));
-            meter.Draw(Direct3DProvider.Instance, false);
-            device.SetTransform(TransformState.World, Matrix.Translation(-width / 2+10, -height / 2+180, 0));
-            ato.Draw(Direct3DProvider.Instance, false);
-            device.SetTransform(TransformState.World, Matrix.Translation(-width / 2 + 160, -height / 2 + 50, 0));
-            meter.Draw(Direct3DProvider.Instance, false);
-            if (Math.Abs(NeXTLocation - nowLocation) >= 1000)
+            if(isUIOff == false)
             {
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 2, -height / 2+100, 0));
-                if (nextone == "0") { r0.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "1") { r1.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "2") { r2.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "3") { r3.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "4") { r4.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "5") { r5.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "6") { r6.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "7") { r7.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "8") { r8.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "9") { r9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 2+50, -height / 2+100, 0));
-                if (nexttwo == "0") { r0.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "1") { r1.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "2") { r2.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "3") { r3.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "4") { r4.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "5") { r5.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "6") { r6.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "7") { r7.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "8") { r8.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "9") { r9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 2+100, -height / 2+100, 0));
-                if (nextthr == "0") { r0.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "1") { r1.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "2") { r2.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "3") { r3.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "4") { r4.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "5") { r5.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "6") { r6.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "7") { r7.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "8") { r8.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "9") { r9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 2+150, -height / 2+100, 0));
-                if (nextfou == "0") { r0.Draw(Direct3DProvider.Instance, false); }
-                if (nextfou == "1") { r1.Draw(Direct3DProvider.Instance, false); }
-                if (nextfou == "2") { r2.Draw(Direct3DProvider.Instance, false); }
-                if (nextfou == "3") { r3.Draw(Direct3DProvider.Instance, false); }
-                if (nextfou == "4") { r4.Draw(Direct3DProvider.Instance, false); }
-                if (nextfou == "5") { r5.Draw(Direct3DProvider.Instance, false); }
-                if (nextfou == "6") { r6.Draw(Direct3DProvider.Instance, false); }
-                if (nextfou == "7") { r7.Draw(Direct3DProvider.Instance, false); }
-                if (nextfou == "8") { r8.Draw(Direct3DProvider.Instance, false); }
-                if (nextfou == "9") { r9.Draw(Direct3DProvider.Instance, false); }
-            }
-            if (Math.Abs(NeXTLocation - nowLocation) < 1000 && Math.Abs(NeXTLocation - nowLocation) >= 100)
-            {
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 2+50, -height / 2+100, 0));
-                if (nextone == "0") { r0.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "1") { r1.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "2") { r2.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "3") { r3.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "4") { r4.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "5") { r5.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "6") { r6.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "7") { r7.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "8") { r8.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "9") { r9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 2+100, -height / 2+100, 0));
-                if (nexttwo == "0") { r0.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "1") { r1.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "2") { r2.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "3") { r3.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "4") { r4.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "5") { r5.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "6") { r6.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "7") { r7.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "8") { r8.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "9") { r9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 2+150, -height / 2+100, 0));
-                if (nextthr == "0") { r0.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "1") { r1.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "2") { r2.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "3") { r3.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "4") { r4.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "5") { r5.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "6") { r6.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "7") { r7.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "8") { r8.Draw(Direct3DProvider.Instance, false); }
-                if (nextthr == "9") { r9.Draw(Direct3DProvider.Instance, false); }
-            }
-            if (Math.Abs(NeXTLocation - nowLocation) < 100 && Math.Abs(NeXTLocation - nowLocation) >= 10)
-            {
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 2+100, -height / 2+100, 0));
-                if (nextone == "0") { r0.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "1") { r1.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "2") { r2.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "3") { r3.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "4") { r4.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "5") { r5.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "6") { r6.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "7") { r7.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "8") { r8.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "9") { r9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 2+150, -height / 2+100, 0));
-                if (nexttwo == "0") { r0.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "1") { r1.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "2") { r2.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "3") { r3.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "4") { r4.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "5") { r5.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "6") { r6.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "7") { r7.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "8") { r8.Draw(Direct3DProvider.Instance, false); }
-                if (nexttwo == "9") { r9.Draw(Direct3DProvider.Instance, false); }
-            }
-            if (Math.Abs(NeXTLocation - nowLocation) < 10)
-            {
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 2+150, -height / 2+100, 0));
-                if (nextone == "0") { r0.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "1") { r1.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "2") { r2.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "3") { r3.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "4") { r4.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "5") { r5.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "6") { r6.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "7") { r7.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "8") { r8.Draw(Direct3DProvider.Instance, false); }
-                if (nextone == "9") { r9.Draw(Direct3DProvider.Instance, false); }
+                width = Direct3DProvider.Instance.PresentParameters.BackBufferWidth;
+                height = Direct3DProvider.Instance.PresentParameters.BackBufferHeight;
+                //3D modelをどこに配置するのか指定するかんじ device.settransform(文字略) 頂点位置の変換
+                Device device = Direct3DProvider.Instance.Device;
+                device.SetTransform(TransformState.View, Matrix.Identity);
+                device.SetTransform(TransformState.Projection, Matrix.OrthoOffCenterLH(-width / 2, width / 2, -height / 2, height / 2, 0, 1));
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 450, -height / 4 - 70, 0));
+                arv.Draw(Direct3DProvider.Instance, false);
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 450, -height / 4 + 10, 0));
+                nowModel.Draw(Direct3DProvider.Instance, false);
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 300, -height / 4 - 80, 0));//arrive１個目
+                if (arrione == "0") { a0.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == "1") { a1.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == "2") { a2.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == "3") { a3.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == "4") { a4.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == "5") { a5.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == "6") { a6.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == "7") { a7.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == "8") { a8.Draw(Direct3DProvider.Instance, false); }
+                if (arrione == "9") { a9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 260, -height / 4 - 80, 0));//arrive２個め
+                if (arritwo == "0") { a0.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == "1") { a1.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == "2") { a2.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == "3") { a3.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == "4") { a4.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == "5") { a5.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == "6") { a6.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == "7") { a7.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == "8") { a8.Draw(Direct3DProvider.Instance, false); }
+                if (arritwo == "9") { a9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 230, -height / 4 - 80, 0));
+                arvColon.Draw(Direct3DProvider.Instance, false);
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 200, -height / 4 - 80, 0));//arrive３個目
+                if (arrithr == "0") { a0.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == "1") { a1.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == "2") { a2.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == "3") { a3.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == "4") { a4.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == "5") { a5.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == "6") { a6.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == "7") { a7.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == "8") { a8.Draw(Direct3DProvider.Instance, false); }
+                if (arrithr == "9") { a9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 160, -height / 4 - 80, 0));//now
+                if (arrifou == "0") { a0.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == "1") { a1.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == "2") { a2.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == "3") { a3.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == "4") { a4.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == "5") { a5.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == "6") { a6.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == "7") { a7.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == "8") { a8.Draw(Direct3DProvider.Instance, false); }
+                if (arrifou == "9") { a9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 130, -height / 4 - 80, 0));//now
+                arvColon.Draw(Direct3DProvider.Instance, false);
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 100, -height / 4 - 80, 0));//now
+                if (arrifiv == "0") { a0.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == "1") { a1.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == "2") { a2.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == "3") { a3.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == "4") { a4.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == "5") { a5.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == "6") { a6.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == "7") { a7.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == "8") { a8.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == "9") { a9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 60, -height / 4 - 80, 0));//now
+                if (arrisix == "0") { a0.Draw(Direct3DProvider.Instance, false); }
+                if (arrisix == "1") { a1.Draw(Direct3DProvider.Instance, false); }
+                if (arrisix == "2") { a2.Draw(Direct3DProvider.Instance, false); }
+                if (arrifiv == "3") { a3.Draw(Direct3DProvider.Instance, false); }
+                if (arrisix == "4") { a4.Draw(Direct3DProvider.Instance, false); }
+                if (arrisix == "5") { a5.Draw(Direct3DProvider.Instance, false); }
+                if (arrisix == "6") { a6.Draw(Direct3DProvider.Instance, false); }
+                if (arrisix == "7") { a7.Draw(Direct3DProvider.Instance, false); }
+                if (arrisix == "8") { a8.Draw(Direct3DProvider.Instance, false); }
+                if (arrisix == "9") { a9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 300, -height / 4, 0));//now
+                if (nowone == "0") { n0.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == "1") { n1.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == "2") { n2.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == "3") { n3.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == "4") { n4.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == "5") { n5.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == "6") { n6.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == "7") { n7.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == "8") { n8.Draw(Direct3DProvider.Instance, false); }
+                if (nowone == "9") { n9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 260, -height / 4, 0));//now
+                if (nowtwo == "0") { n0.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == "1") { n1.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == "2") { n2.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == "3") { n3.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == "4") { n4.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == "5") { n5.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == "6") { n6.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == "7") { n7.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == "8") { n8.Draw(Direct3DProvider.Instance, false); }
+                if (nowtwo == "9") { n9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 230, -height / 4, 0));
+                nowColon.Draw(Direct3DProvider.Instance, false);
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 200, -height / 4, 0));//now
+                if (nowthr == "0") { n0.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == "1") { n1.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == "2") { n2.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == "3") { n3.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == "4") { n4.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == "5") { n5.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == "6") { n6.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == "7") { n7.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == "8") { n8.Draw(Direct3DProvider.Instance, false); }
+                if (nowthr == "9") { n9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 160, -height / 4, 0));//now
+                if (nowfou == "0") { n0.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == "1") { n1.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == "2") { n2.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == "3") { n3.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == "4") { n4.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == "5") { n5.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == "6") { n6.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == "7") { n7.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == "8") { n8.Draw(Direct3DProvider.Instance, false); }
+                if (nowfou == "9") { n9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 130, -height / 4, 0));
+                nowColon.Draw(Direct3DProvider.Instance, false);
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 100, -height / 4, 0));//now
+                if (nowfiv == "0") { n0.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == "1") { n1.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == "2") { n2.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == "3") { n3.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == "4") { n4.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == "5") { n5.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == "6") { n6.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == "7") { n7.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == "8") { n8.Draw(Direct3DProvider.Instance, false); }
+                if (nowfiv == "9") { n9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 60, -height / 4, 0));//now
+                if (nowsix == "0") { n0.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == "1") { n1.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == "2") { n2.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == "3") { n3.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == "4") { n4.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == "5") { n5.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == "6") { n6.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == "7") { n7.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == "8") { n8.Draw(Direct3DProvider.Instance, false); }
+                if (nowsix == "9") { n9.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2, -height / 4, 0));
+                meter.Draw(Direct3DProvider.Instance, false);
+                device.SetTransform(TransformState.World, Matrix.Translation(-width / 2 + 10, -height / 2 + 180, 0));
+                ato.Draw(Direct3DProvider.Instance, false);
+                device.SetTransform(TransformState.World, Matrix.Translation(-width / 2 + 160, -height / 2 + 50, 0));
+                meter.Draw(Direct3DProvider.Instance, false);
+                if (Math.Abs(NeXTLocation - nowLocation) >= 1000)
+                {
+                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 2, -height / 2 + 100, 0));
+                    if (nextone == "0") { r0.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "1") { r1.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "2") { r2.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "3") { r3.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "4") { r4.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "5") { r5.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "6") { r6.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "7") { r7.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "8") { r8.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "9") { r9.Draw(Direct3DProvider.Instance, false); }
+                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 2 + 50, -height / 2 + 100, 0));
+                    if (nexttwo == "0") { r0.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "1") { r1.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "2") { r2.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "3") { r3.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "4") { r4.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "5") { r5.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "6") { r6.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "7") { r7.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "8") { r8.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "9") { r9.Draw(Direct3DProvider.Instance, false); }
+                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 2 + 100, -height / 2 + 100, 0));
+                    if (nextthr == "0") { r0.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "1") { r1.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "2") { r2.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "3") { r3.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "4") { r4.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "5") { r5.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "6") { r6.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "7") { r7.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "8") { r8.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "9") { r9.Draw(Direct3DProvider.Instance, false); }
+                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 2 + 150, -height / 2 + 100, 0));
+                    if (nextfou == "0") { r0.Draw(Direct3DProvider.Instance, false); }
+                    if (nextfou == "1") { r1.Draw(Direct3DProvider.Instance, false); }
+                    if (nextfou == "2") { r2.Draw(Direct3DProvider.Instance, false); }
+                    if (nextfou == "3") { r3.Draw(Direct3DProvider.Instance, false); }
+                    if (nextfou == "4") { r4.Draw(Direct3DProvider.Instance, false); }
+                    if (nextfou == "5") { r5.Draw(Direct3DProvider.Instance, false); }
+                    if (nextfou == "6") { r6.Draw(Direct3DProvider.Instance, false); }
+                    if (nextfou == "7") { r7.Draw(Direct3DProvider.Instance, false); }
+                    if (nextfou == "8") { r8.Draw(Direct3DProvider.Instance, false); }
+                    if (nextfou == "9") { r9.Draw(Direct3DProvider.Instance, false); }
+                }
+                if (Math.Abs(NeXTLocation - nowLocation) < 1000 && Math.Abs(NeXTLocation - nowLocation) >= 100)
+                {
+                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 2 + 50, -height / 2 + 100, 0));
+                    if (nextone == "0") { r0.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "1") { r1.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "2") { r2.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "3") { r3.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "4") { r4.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "5") { r5.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "6") { r6.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "7") { r7.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "8") { r8.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "9") { r9.Draw(Direct3DProvider.Instance, false); }
+                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 2 + 100, -height / 2 + 100, 0));
+                    if (nexttwo == "0") { r0.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "1") { r1.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "2") { r2.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "3") { r3.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "4") { r4.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "5") { r5.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "6") { r6.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "7") { r7.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "8") { r8.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "9") { r9.Draw(Direct3DProvider.Instance, false); }
+                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 2 + 150, -height / 2 + 100, 0));
+                    if (nextthr == "0") { r0.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "1") { r1.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "2") { r2.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "3") { r3.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "4") { r4.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "5") { r5.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "6") { r6.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "7") { r7.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "8") { r8.Draw(Direct3DProvider.Instance, false); }
+                    if (nextthr == "9") { r9.Draw(Direct3DProvider.Instance, false); }
+                }
+                if (Math.Abs(NeXTLocation - nowLocation) < 100 && Math.Abs(NeXTLocation - nowLocation) >= 10)
+                {
+                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 2 + 100, -height / 2 + 100, 0));
+                    if (nextone == "0") { r0.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "1") { r1.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "2") { r2.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "3") { r3.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "4") { r4.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "5") { r5.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "6") { r6.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "7") { r7.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "8") { r8.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "9") { r9.Draw(Direct3DProvider.Instance, false); }
+                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 2 + 150, -height / 2 + 100, 0));
+                    if (nexttwo == "0") { r0.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "1") { r1.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "2") { r2.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "3") { r3.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "4") { r4.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "5") { r5.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "6") { r6.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "7") { r7.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "8") { r8.Draw(Direct3DProvider.Instance, false); }
+                    if (nexttwo == "9") { r9.Draw(Direct3DProvider.Instance, false); }
+                }
+                if (Math.Abs(NeXTLocation - nowLocation) < 10)
+                {
+                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 2 + 150, -height / 2 + 100, 0));
+                    if (nextone == "0") { r0.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "1") { r1.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "2") { r2.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "3") { r3.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "4") { r4.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "5") { r5.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "6") { r6.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "7") { r7.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "8") { r8.Draw(Direct3DProvider.Instance, false); }
+                    if (nextone == "9") { r9.Draw(Direct3DProvider.Instance, false); }
+                }
+                device.SetTransform(TransformState.World, Matrix.Translation(-width / 2 + 150, -height / 2 + 100, 0));
+
             }
         }
         //500行超えるのでLife２関しての記述はUIDrawerにて

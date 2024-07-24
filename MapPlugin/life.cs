@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AtsEx.PluginHost.Native;
 
 namespace MetroDrive
 {
@@ -209,87 +210,12 @@ namespace MetroDrive
                 isRestart = false;
             }
         }
-        public void Update(double speed,int power,int brake,double nowLocation,double NeXTLocation,bool pass,int arriveMilli,int nowMilli,int EB)//毎フレーム呼び出す
-        {
-            //ATC超過
-            if(speed < atc && power > 0) 
-            {
-                life -= overatc;
-                isOveratc = true;
-            }
-            else{
-                isOveratc = false;
-            }
-            //遅れ
-            if(pass == false && nowMilli - arriveMilli >0)
-            {
-                //範囲外
-                if(Math.Abs(nowLocation - NeXTLocation)>GoukakuHani )
-                {
-                    life -= overtime;//５秒以上遅れたら１秒ごとに減点
-                    Delay(1000);
-                }
-                //範囲内かつ停車していない
-                if(Math.Abs(nowLocation - NeXTLocation)<GoukakuHani && speed>0)
-                {
-                    life-= overtime;
-                    Delay(1000);
-                }
-            }
-            else
-            {
-                if(arriveMilli - nowMilli >5000 && NeXTLocation > nowLocation)
-                {
-                    life -= overtime;
-                    Delay(1000);
-                }
-                if(Math.Abs(arriveMilli - nowMilli)<1000 && NeXTLocation == nowLocation)
-                {
-                    life += teitu;
-                    Delay(1000);
-                }
-            }
-            if(brake == EB && speed > 5)//非常制動
-            {
-                isEBbrake =true;
-                life -= EBbrake;
-                Delay(2000);
-                isEBbrake = false;
-            }
-            //フラグを設定する
-            if(Math.Abs(nowLocation - NeXTLocation)<0.5 && speed < 0.1 )//Good
-            {
-                life += good;
-                isGood = true;
-                Delay(2000);
-                isGood = false;
-            }
-            if(Math.Abs(nowLocation - NeXTLocation)<0.5 && speed == 0.1 && Math.Abs(nowMilli - arriveMilli)<2000)//Great
-            {
-                life += great;
-                isGreat = true;
-                Delay(2000);
-                isGreat = false;
-            }
-            //オーバーラン
-            if (nowLocation > GoukakuHani + NeXTLocation)//過走時
-            {
-                if (speed == 0)
-                {
-                    int overrun = Convert.ToInt32(nowLocation - NeXTLocation);
-                    life -= overrun;
-                    Delay(5000);
-                }
-            }
-            //TEST
-            isTeituu = false;
-        }
         static async void Delay(int e)
         {
             await Task.Delay(e);
             return;
         }
-        void OnHorn()//警笛イベントのときに呼ばれる
+        public void OnHorn(HornBlownEventArgs e)//警笛イベントのときに呼ばれる
         {
             if(HideHorn == true)//警笛ボーナス
             {

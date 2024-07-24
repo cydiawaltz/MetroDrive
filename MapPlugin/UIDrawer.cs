@@ -45,7 +45,6 @@ namespace MetroDrive
         string lifethree;
         public void CreateModel(string Location)
         {
-            TimeDrawer timeDrawer = new TimeDrawer();
             p0 = CreatePowerModel("0");
             p1 = CreatePowerModel("1");
             p2 = CreatePowerModel("2");
@@ -103,115 +102,121 @@ namespace MetroDrive
                 return brakeNotch;
             }
         }
-        public void UIDraw(int power,int brake,int EB,bool isTeituu,int life)
+        public void UIDraw(int power,int brake,int EB,bool isTeituu,int life,bool isUIOff)
         {
-            int width = Direct3DProvider.Instance.PresentParameters.BackBufferWidth;
-            int height = Direct3DProvider.Instance.PresentParameters.BackBufferHeight;
-            Device device = Direct3DProvider.Instance.Device;
-            device.SetTransform(TransformState.World, Matrix.Translation(-width / 2, height / 2, 0));
-            if (power == 0) { p0.Draw(Direct3DProvider.Instance, false); }
-            if (power == 1) { p1.Draw(Direct3DProvider.Instance, false); }
-            if (power == 2) { p2.Draw(Direct3DProvider.Instance, false); }
-            if (power == 3) { p3.Draw(Direct3DProvider.Instance, false); }
-            if (power == 4) { p4.Draw(Direct3DProvider.Instance, false); }
-            device.SetTransform(TransformState.World, Matrix.Translation(width / 2, height / 2, 0));//(float)Math.Sin(Native.VehicleState.Time.TotalSeconds)*100
-            if (brake == 0) { b0.Draw(Direct3DProvider.Instance, false); }
-            if (brake == 1) { b1.Draw(Direct3DProvider.Instance, false); }
-            if (brake == 2) { b2.Draw(Direct3DProvider.Instance, false); }
-            if (brake == 3) { b3.Draw(Direct3DProvider.Instance, false); }
-            if (brake == 4) { b4.Draw(Direct3DProvider.Instance, false); }
-            if (brake == 5) { b5.Draw(Direct3DProvider.Instance, false); }
-            if (brake == 6) { b6.Draw(Direct3DProvider.Instance, false); }
-            if (brake == 7) { b7.Draw(Direct3DProvider.Instance, false); }
-            if (brake == 8) { b8.Draw(Direct3DProvider.Instance, false); }
-            if (brake == EB) { eb.Draw(Direct3DProvider.Instance, false); }
-            device.SetTransform(TransformState.World, Matrix.Translation(0/2-200, 0/ 2+150, 0));
-            if(isTeituu == true) { teituu.Draw(Direct3DProvider.Instance, false); }
+            if(isUIOff == false)
+            {
+                int width = Direct3DProvider.Instance.PresentParameters.BackBufferWidth;
+                int height = Direct3DProvider.Instance.PresentParameters.BackBufferHeight;
+                Device device = Direct3DProvider.Instance.Device;
+                device.SetTransform(TransformState.World, Matrix.Translation(-width / 2, height / 2, 0));
+                if (power == 0) { p0.Draw(Direct3DProvider.Instance, false); }
+                if (power == 1) { p1.Draw(Direct3DProvider.Instance, false); }
+                if (power == 2) { p2.Draw(Direct3DProvider.Instance, false); }
+                if (power == 3) { p3.Draw(Direct3DProvider.Instance, false); }
+                if (power == 4) { p4.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2, height / 2, 0));//(float)Math.Sin(Native.VehicleState.Time.TotalSeconds)*100
+                if (brake == 0) { b0.Draw(Direct3DProvider.Instance, false); }
+                if (brake == 1) { b1.Draw(Direct3DProvider.Instance, false); }
+                if (brake == 2) { b2.Draw(Direct3DProvider.Instance, false); }
+                if (brake == 3) { b3.Draw(Direct3DProvider.Instance, false); }
+                if (brake == 4) { b4.Draw(Direct3DProvider.Instance, false); }
+                if (brake == 5) { b5.Draw(Direct3DProvider.Instance, false); }
+                if (brake == 6) { b6.Draw(Direct3DProvider.Instance, false); }
+                if (brake == 7) { b7.Draw(Direct3DProvider.Instance, false); }
+                if (brake == 8) { b8.Draw(Direct3DProvider.Instance, false); }
+                if (brake == EB) { eb.Draw(Direct3DProvider.Instance, false); }
+                device.SetTransform(TransformState.World, Matrix.Translation(0 / 2 - 200, 0 / 2 + 150, 0));
+                if (isTeituu == true) { teituu.Draw(Direct3DProvider.Instance, false); }
+            }
         }
-        public void LifeDraw(int life)
+        public void LifeDraw(int life,bool isUIOff)
         {
-            Device device = Direct3DProvider.Instance.Device;
-            int width = Direct3DProvider.Instance.PresentParameters.BackBufferWidth;
-            int height = Direct3DProvider.Instance.PresentParameters.BackBufferHeight;
-            if(life>=100)
+            if(isUIOff == false)
             {
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4, 0));
-                if (lifeone == "0") { l0.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "1") { l1.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "2") { l2.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "3") { l3.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "4") { l4.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "5") { l5.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "6") { l6.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "7") { l7.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "8") { l8.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "9") { l9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(-width /4, -height / 4, 0));
-                if (lifetwo == "0") { l0.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "1") { l1.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "2") { l2.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "3") { l3.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "4") { l4.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "5") { l5.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "6") { l6.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "7") { l7.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "8") { l8.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "9") { l9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4, 0));
-                if (lifethree == "0") { l0.Draw(Direct3DProvider.Instance, false); }
-                if (lifethree == "1") { l1.Draw(Direct3DProvider.Instance, false); }
-                if (lifethree == "2") { l2.Draw(Direct3DProvider.Instance, false); }
-                if (lifethree == "3") { l3.Draw(Direct3DProvider.Instance, false); }
-                if (lifethree == "4") { l4.Draw(Direct3DProvider.Instance, false); }
-                if (lifethree == "5") { l5.Draw(Direct3DProvider.Instance, false); }
-                if (lifethree == "6") { l6.Draw(Direct3DProvider.Instance, false); }
-                if (lifethree == "7") { l7.Draw(Direct3DProvider.Instance, false); }
-                if (lifethree == "8") { l8.Draw(Direct3DProvider.Instance, false); }
-                if (lifethree == "9") { l9.Draw(Direct3DProvider.Instance, false); }
+                Device device = Direct3DProvider.Instance.Device;
+                int width = Direct3DProvider.Instance.PresentParameters.BackBufferWidth;
+                int height = Direct3DProvider.Instance.PresentParameters.BackBufferHeight;
+                if (life >= 100)
+                {
+                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4, 0));
+                    if (lifeone == "0") { l0.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "1") { l1.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "2") { l2.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "3") { l3.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "4") { l4.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "5") { l5.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "6") { l6.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "7") { l7.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "8") { l8.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "9") { l9.Draw(Direct3DProvider.Instance, false); }
+                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4, 0));
+                    if (lifetwo == "0") { l0.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "1") { l1.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "2") { l2.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "3") { l3.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "4") { l4.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "5") { l5.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "6") { l6.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "7") { l7.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "8") { l8.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "9") { l9.Draw(Direct3DProvider.Instance, false); }
+                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4, 0));
+                    if (lifethree == "0") { l0.Draw(Direct3DProvider.Instance, false); }
+                    if (lifethree == "1") { l1.Draw(Direct3DProvider.Instance, false); }
+                    if (lifethree == "2") { l2.Draw(Direct3DProvider.Instance, false); }
+                    if (lifethree == "3") { l3.Draw(Direct3DProvider.Instance, false); }
+                    if (lifethree == "4") { l4.Draw(Direct3DProvider.Instance, false); }
+                    if (lifethree == "5") { l5.Draw(Direct3DProvider.Instance, false); }
+                    if (lifethree == "6") { l6.Draw(Direct3DProvider.Instance, false); }
+                    if (lifethree == "7") { l7.Draw(Direct3DProvider.Instance, false); }
+                    if (lifethree == "8") { l8.Draw(Direct3DProvider.Instance, false); }
+                    if (lifethree == "9") { l9.Draw(Direct3DProvider.Instance, false); }
+                }
+                if (life >= 10 && life < 100)
+                {
+                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4, 0));
+                    if (lifeone == "0") { l0.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "1") { l1.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "2") { l2.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "3") { l3.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "4") { l4.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "5") { l5.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "6") { l6.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "7") { l7.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "8") { l8.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "9") { l9.Draw(Direct3DProvider.Instance, false); }
+                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 4 + 10, -height / 4, 0));
+                    if (lifetwo == "0") { l0.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "1") { l1.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "2") { l2.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "3") { l3.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "4") { l4.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "5") { l5.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "6") { l6.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "7") { l7.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "8") { l8.Draw(Direct3DProvider.Instance, false); }
+                    if (lifetwo == "9") { l9.Draw(Direct3DProvider.Instance, false); }
+                }
+                if (life < 10)
+                {
+                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4, 0));
+                    l0.Draw(Direct3DProvider.Instance, false);
+                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4, 0));
+                    if (lifeone == "0") { l0.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "1") { l1.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "2") { l2.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "3") { l3.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "4") { l4.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "5") { l5.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "6") { l6.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "7") { l7.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "8") { l8.Draw(Direct3DProvider.Instance, false); }
+                    if (lifeone == "9") { l9.Draw(Direct3DProvider.Instance, false); }
+                }
+                device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4 + 80, 0));
+                lifeModel.Draw(Direct3DProvider.Instance, false);
             }
-            if (life >=10 && life < 100)
-            {
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4, 0));
-                if (lifeone == "0") { l0.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "1") { l1.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "2") { l2.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "3") { l3.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "4") { l4.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "5") { l5.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "6") { l6.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "7") { l7.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "8") { l8.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "9") { l9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 4+10, -height / 4, 0));
-                if (lifetwo == "0") { l0.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "1") { l1.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "2") { l2.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "3") { l3.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "4") { l4.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "5") { l5.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "6") { l6.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "7") { l7.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "8") { l8.Draw(Direct3DProvider.Instance, false); }
-                if (lifetwo == "9") { l9.Draw(Direct3DProvider.Instance, false); }
-            }
-            if (life < 10)
-            {
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4, 0));
-                l0.Draw(Direct3DProvider.Instance, false);
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4, 0));
-                if (lifeone == "0") { l0.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "1") { l1.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "2") { l2.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "3") { l3.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "4") { l4.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "5") { l5.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "6") { l6.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "7") { l7.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "8") { l8.Draw(Direct3DProvider.Instance, false); }
-                if (lifeone == "9") { l9.Draw(Direct3DProvider.Instance, false); }
-            }
-            device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4 + 80, 0));
-            lifeModel.Draw(Direct3DProvider.Instance, false);
         }
         public TickResult tick(int life)
         {
@@ -229,6 +234,4 @@ namespace MetroDrive
             return new MapPluginTickResult();
         }
     }
-
-
 }
