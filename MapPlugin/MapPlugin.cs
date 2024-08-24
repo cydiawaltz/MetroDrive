@@ -5,7 +5,8 @@ using FastMember;
 using TypeWrapping;
 using ObjectiveHarmonyPatch;
 using AtsEx.PluginHost.Native;
-using AtsEx.PluginHost.MapStatements;
+//using AtsEx.PluginHost.MapStatements;
+using AtsEx.Extensions.MapStatements;
 using System.Collections.Generic;
 using Mackoy.Bvets;
 using System.Timers;
@@ -14,7 +15,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 
-namespace MetroDrive
+namespace MetroDrive.MapPlugin
 {
     [Plugin(PluginType.MapPlugin)]
     internal class MapPluginMain : AssemblyPluginBase
@@ -66,12 +67,18 @@ namespace MetroDrive
         bool isPause;
         Task task;
         int timer;
+        int nativepower;
+        int nativebrake;
+        double goukakuhani;
+        public string sharedMes;
+        TimeSpan totalElapsed = TimeSpan.Zero;
         public MapPluginMain(PluginBuilder builder) : base(builder)
         {
             if (!System.Diagnostics.Debugger.IsAttached)
             {
                 System.Diagnostics.Debugger.Launch();
             }
+            sharedMes = "none";
             life = new Life();
             timeDrawer = new TimeDrawer();
             uIDrawer = new UIDrawer();
@@ -80,23 +87,21 @@ namespace MetroDrive
             Native.HornBlown += new HornBlownEventHandler(life.OnHorn);
             BveHacker.MainFormSource.KeyDown += OnKeyDown;
             FlagStart();
-            //MemoryMappedFile a = MemoryMappedFile.CreateNew("ScenarioOpen", 4096);
-            //sendtounity = a.CreateViewAccessor();
-            ClassMemberSet assistantDrawerMembers = BveHacker.BveTypes.GetClassInfoOf<AssistantDrawer>();
-            FastMethod drawMethod = assistantDrawerMembers.GetSourceMethodOf(nameof(AssistantDrawer.Draw));
-            HarmonyPatch drawPatch = HarmonyPatch.Patch(Name, drawMethod.Source, PatchType.Prefix);
-            timeDrawer.CreateModel(Location);
-            uIDrawer.CreateModel(Location);
-            pause.CreateModel(Location);
-            drawPatch.Invoked += (sender, e) =>
+            IStatementSet statementSet = Extensions.GetExtension<IStatementSet>();
+            ClauseFilter metroFilter = new ClauseFilter("MetroDrive", ClauseType.Element);
+            Statement levelStatement = statementSet.FindUserStatement("Wattz",metroFilter,new ClauseFilter("Level",ClauseType.Function));
+            Statement bonusStatement = statementSet.FindUserStatement("Wattz", metroFilter, new ClauseFilter("isBonus", ClauseType.Function));
+            Statement taikenStatement = statementSet.FindUserStatement("Wattz", metroFilter, new ClauseFilter("isTaiken", ClauseType.Function));
+            Statement locationStatement = statementSet.FindUserStatement("Wattz", metroFilter, new ClauseFilter("addedLocation", ClauseType.Function));
+            Statement arrivalStatement = statementSet.FindUserStatement("Wattz", metroFilter, new ClauseFilter("addedArrival", ClauseType.Function));
+            //keysはstru~[].putの[]のなか
+            if (levelStatement.Source.Clauses[4].Args[0].ToString() == "Easy")
             {
-                timeDrawer.Patch(NeXTLocation, nowLocation,isUIOff);
-                uIDrawer.UIDraw(power, brake, EB, life.isTeituu, life.life,isUIOff);
-                uIDrawer.LifeDraw(life.life,isUIOff);
-                pause.PauseMenuDrawer(pointerIndex, isEnterPressed, isExitScenario, isVoiceOn,isUIOff);
-                return PatchInvokationResult.DoNothing(e);
-            };
-            Namespace ns = Namespace.GetUserNamespace("CydiaWaltz").Child("MetroDrive");
+                life.OnStartEasy();
+            }
+
+            //life.OnStartEasy();
+            /*Namespace ns = Namespace.GetUserNamespace("CydiaWaltz").Child("MetroDrive");
             Identifier difficulty = new Identifier(ns, "Level");
             IReadOnlyList<IHeader> headers = BveHacker.MapHeaders.GetAll(difficulty);
             for (int i = 0; i < headers.Count; i++)
@@ -134,31 +139,53 @@ namespace MetroDrive
                 IHeader header = eheader[i];
                 TimeSpan a = TimeSpan.Parse(header.Name.FullName);
                 addStaArrival = (int)a.TotalMilliseconds;
-            }
+            }*/
+            //MemoryMappedFile a = MemoryMappedFile.CreateNew("ScenarioOpen", 4096);
+            //sendtounity = a.CreateViewAccessor();
+            ClassMemberSet assistantDrawerMembers = BveHacker.BveTypes.GetClassInfoOf<AssistantDrawer>();
+            FastMethod drawMethod = assistantDrawerMembers.GetSourceMethodOf(nameof(AssistantDrawer.Draw));
+            HarmonyPatch drawPatch = HarmonyPatch.Patch(Name, drawMethod.Source, PatchType.Prefix);
+            timeDrawer.CreateModel(Location);
+            uIDrawer.CreateModel(Location);
+            pause.CreateModel(Location);
+            drawPatch.Invoked += (sender, e) =>
+            {
+                timeDrawer.Patch(NeXTLocation, nowLocation,isUIOff, life.GoukakuHani);
+                uIDrawer.UIDraw(power, nativebrake, EB, life.isTeituu, life.life,isUIOff);
+                uIDrawer.LifeDraw(life.life,isUIOff);
+                pause.PauseMenuDrawer(pointerIndex, isEnterPressed, isExitScenario, isVoiceOn,isUIOff);
+                return PatchInvokationResult.DoNothing(e);
+            };
+            
             //計器照明を有効に
             InputEventArgs inputEventArgs = new InputEventArgs(-2, 15);
             BveHacker.KeyProvider.KeyDown_Invoke(inputEventArgs);
             BveHacker.KeyProvider.KeyUp_Invoke(inputEventArgs);
-            InputEventArgs inputEventArgs2 = new InputEventArgs(2, 1);
-            BveHacker.KeyProvider.KeyDown_Invoke(inputEventArgs2);
-            BveHacker.KeyProvider.KeyUp_Invoke(inputEventArgs2);
             //毎秒実行
-            System.Timers.Timer timer = new System.Timers.Timer(2000);
-            timer.Elapsed += FlagBuilder;
-            timer.Start();
+            //System.Windows.Forms.Timer ftimer = new System.Windows.Forms.Timer();
+            
+            System.Timers.Timer ftimer = new System.Timers.Timer(1000);
+            ftimer.Elapsed += FlagBuilder;
+            //ftimer.Tick += FlagBuilder;
+            ftimer.Start();
             isTimeOut = false;
-            MessageBox.Show("MetroDriveプラグインが読み込まれました");
-            NamedPipe((int)NeXTLocation);
+            //MessageBox.Show("MetroDriveプラグインが読み込まれました");
+            //NamedPipe((int)NeXTLocation);
             isPause= false;
         }
         public override void Dispose()
         {
             Native.BeaconPassed -= BeaconPassed;
             Native.HornBlown -= life.OnHorn;
-            //Formを非表示にする処理
         }
         public override TickResult Tick(TimeSpan elapsed)
         {
+            totalElapsed += elapsed;
+            if(totalElapsed.TotalSeconds >= 1)
+            {
+                //しょり
+                totalElapsed -= TimeSpan.FromSeconds(1);
+            }
             var station = BveHacker.Scenario.Route.Stations[index] as Station;
             if (station == null)
             {
@@ -172,21 +199,17 @@ namespace MetroDrive
             EB = 9;//EB
             //power = BveHacker.Handles.Power.Notch;//PowerNotch
             //brake = BveHacker.Handles.Brake.Notch;//BrakeNotch
-            power = Native.Handles.Power.Notch;
-            brake = Native.Handles.Brake.Notch;
+            nativepower = Native.Handles.Power.Notch;//ATCの方
+            nativebrake = Native.Handles.Brake.Notch;
+            power = BveHacker.Scenario.Vehicle.Instruments.Cab.Handles.PowerNotch;//入力の方
+            brake = BveHacker.Scenario.Vehicle.Instruments.Cab.Handles.BrakeNotch;
             nowMilli = BveHacker.Scenario.TimeManager.TimeMilliseconds;//Now
             speed = Native.VehicleState.Speed;//speed
             now = BveHacker.Scenario.TimeManager.Time.ToString("hhmmss");
             arrive = station.DepartureTime.ToString("hhmmss");
-            if (brake == 0) { }
-            else
+            if(brake > 0||nativebrake > 0)
             {
-                for (int i = 0; i == 3; i++)
-                {
-                    InputEventArgs inputEventArgs = new InputEventArgs(1, 0);
-                    BveHacker.KeyProvider.KeyDown_Invoke(inputEventArgs);
-                    BveHacker.KeyProvider.KeyUp_Invoke(inputEventArgs);
-                }
+                power = 0;
             }
             if (pass == true && NeXTLocation == nowLocation)
             {
@@ -201,95 +224,13 @@ namespace MetroDrive
 
                 BveHacker.MainForm.UnloadScenario();
             }
-
+            timer++;
+            if(timer == 2)//1だと動かない（うさぷら側の仕様？？）
+            {
+                InputEventArgs inputEventArgs2 = new InputEventArgs(2, 8);
+                BveHacker.KeyProvider.LeverMoved_Invoke(inputEventArgs2);
+            }
             return new MapPluginTickResult();
-        }
-        public void NamedPipe(int writething)
-        {
-            //名前付きパイプのテスト
-            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream(".", "testpipe", PipeDirection.Out))
-            {
-                try
-                {
-                    pipeClient.Connect(1000);
-                    using (StreamWriter writer = new StreamWriter(pipeClient))
-                    {
-                        writer.WriteLine(writething);
-                        writer.Flush(); // これによりデータがパイプに即座に書き込まれる
-                    }
-                }
-                catch (TimeoutException)
-                {
-                    MessageBox.Show("接続がタイムアウトされました。ポーズメニューより「運転終了」を選択した上、ゲームを再起動してください。");
-                    isTimeOut = true;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
-        }
-        //名前付きパイプの受信
-        public void ReceivePipe()
-        {
-            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream(".", "testpipe", PipeDirection.In))
-            {
-                try
-                {
-                    pipeClient.Connect(2000);
-                    using (StreamReader reader = new StreamReader(pipeClient))
-                    {
-                        while (true)
-                        {
-                            string mes = reader.ReadLine();
-                            if (mes == null) break;
-                            string filedirectory = BveHacker.ScenarioInfo.DirectoryName;
-                            /*switch (mes)
-                            {
-                                case "10"://Unity→BVEは10番台
-                                    //BVEのMainFormをオンにする
-                                    break;
-                                case "11"://シナリオ1の読み込み
-                                    BveHacker.MainForm.OpenScenario(Path.Combine(filedirectory, "1.txt"));
-                                    break;
-                                case "12"://シナリオ1の読み込み
-                                    BveHacker.MainForm.OpenScenario(Path.Combine(filedirectory, "2.txt"));
-                                    break;
-                                case "13"://シナリオ1の読み込み
-                                    BveHacker.MainForm.OpenScenario(Path.Combine(filedirectory, "3.txt"));
-                                    break;
-                                case "14"://シナリオ1の読み込み
-                                    BveHacker.MainForm.OpenScenario(Path.Combine(filedirectory, "4.txt"));
-                                    break;
-                                case "15"://シナリオ1の読み込み
-                                    BveHacker.MainForm.OpenScenario(Path.Combine(filedirectory, "5.txt"));
-                                    break;
-                                case "16"://シナリオ1の読み込み
-                                    BveHacker.MainForm.OpenScenario(Path.Combine(filedirectory, "6.txt"));
-                                    break;
-                                case "17"://シナリオ1の読み込み
-                                    BveHacker.MainForm.OpenScenario(Path.Combine(filedirectory, "7.txt"));
-                                    break;
-                                        case "18"://シナリオ1の読み込み
-                                    BveHacker.MainForm.OpenScenario(Path.Combine(filedirectory, "8.txt"));
-                                    break;
-                                case "19"://シナリオ1の読み込み
-                                    BveHacker.MainForm.OpenScenario(Path.Combine(filedirectory, "9.txt"));
-                                    break;
-                                case "20"://シナリオ1の読み込み
-                                    BveHacker.MainForm.OpenScenario(Path.Combine(filedirectory, "10.txt"));
-                                    break;
-                            }*/
-                            ScenarioInfo scenarioinfo = BveHacker.ScenarioInfo.FromFile(Path.Combine(filedirectory, (int.Parse(mes)-10).ToString()+".txt"));
-                            BveHacker.MainForm.LoadScenario(scenarioinfo, true);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
         }
         public void BeaconPassed(BeaconPassedEventArgs e)
         {
@@ -337,7 +278,7 @@ namespace MetroDrive
                     break;
             }
         }
-        void FlagBuilder(object sender, ElapsedEventArgs e)
+        void FlagBuilder(object sender, EventArgs e)
         {
             if (speed < atc && power > 0) { isOverATC = true; }
             if (nowMilli - arriveMilli < 0)
@@ -348,7 +289,8 @@ namespace MetroDrive
                     if (Math.Abs(nowLocation - NeXTLocation) < life.GoukakuHani && speed > 0)
                     { isDelay = true; }
                 }
-                else {
+                else 
+                {
                     if (nowLocation < NeXTLocation)
                     {
                         isDelay = true;
@@ -393,10 +335,11 @@ namespace MetroDrive
                 }
             }
         }
-        void EndBVE(int writething)
+        void EndScenario()
         {
-            NamedPipe(writething);
-            BveHacker.MainForm.CreateDirectXDevices();
+            sharedMes = "endscenario";
+            BveHacker.MainForm.UnloadScenario();
+            BveHacker.MainFormSource.Hide();
         }
         void FlagStart()
         {
@@ -410,13 +353,15 @@ namespace MetroDrive
         }
         void FixOverRun()//オーバーランを直す
         {
-            isFixOver = true;
+            /*isFixOver = true;
             speed = 20;
             if (nowLocation - NeXTLocation > life.GoukakuHani)
             {
                 speed = 0;
                 isFixOver = false;
-            }
+            }*/
+            //UserVehicleLocationManager.SetLocation(NeXTLocation,false);//距離呈の変更
+
         }
         public void OnAddStation()
         {
@@ -436,7 +381,7 @@ namespace MetroDrive
             {
                 MessageBox.Show("茅場町駅のロードに失敗しました。運転を終了します。エラーメッセージ:"+e);
                 //BVEを終了するメソッドを呼び出
-                EndBVE(1);
+                EndScenario();
             }
         }
         void FormControll()

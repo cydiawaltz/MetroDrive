@@ -71,6 +71,8 @@ namespace MetroDrive
         public Model nowColon;
         public Model ato;
         public Model meter;
+        Model over;
+        Model teisiiti;
         public void CreateModel(string Location)//Mainの中で呼び出すやつ
         {
             //string testTexPath = Path.Combine(Path.GetDirectoryName(Location),@"picture\aaa.jpg");//DLLが入っているフォルダまで
@@ -114,6 +116,8 @@ namespace MetroDrive
             arvColon = CreateAnyModel(@"picture\arrive\colon.png", 0, 0, 30, 60);
             nowColon = CreateAnyModel(@"picture\now\colon.png", 0, 0, 30, 60);
             ato = CreateAnyModel(@"picture\remain\ato.png", 0, 0, 150, 80);
+            over = CreateAnyModel(@"picture\remain\over.png", 0, 0, 200, 80);
+            teisiiti = CreateAnyModel(@"picture\remain\teisiiti.png", 0, 0, 250, 80);
             meter = CreateAnyModel(@"picture\remain\m.png", 0, 0, 50, 60);
             
             Model CreateArvModel()
@@ -145,7 +149,7 @@ namespace MetroDrive
                 return brakeNotch;
             }
         }
-        public void Patch(double NeXTLocation,double nowLocation,bool isUIOff)//まずこれを呼ぶ
+        public void Patch(double NeXTLocation,double nowLocation,bool isUIOff,double Goukakuhani)//まずこれを呼ぶ
         {
             if(isUIOff == false)
             {
@@ -155,11 +159,11 @@ namespace MetroDrive
                 Device device = Direct3DProvider.Instance.Device;
                 device.SetTransform(TransformState.View, Matrix.Identity);
                 device.SetTransform(TransformState.Projection, Matrix.OrthoOffCenterLH(-width / 2, width / 2, -height / 2, height / 2, 0, 1));
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 450, -height / 4 - 70, 0));
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 450, -height / 2+90, 0));
                 arv.Draw(Direct3DProvider.Instance, false);
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 450, -height / 4 + 10, 0));
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 450, -height / 2+170, 0));
                 nowModel.Draw(Direct3DProvider.Instance, false);
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 300, -height / 4 - 80, 0));//arrive１個目
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 300, -height / 2 + 80 , 0));//arrive１個目
                 if (arrione == "0") { a0.Draw(Direct3DProvider.Instance, false); }
                 if (arrione == "1") { a1.Draw(Direct3DProvider.Instance, false); }
                 if (arrione == "2") { a2.Draw(Direct3DProvider.Instance, false); }
@@ -170,7 +174,7 @@ namespace MetroDrive
                 if (arrione == "7") { a7.Draw(Direct3DProvider.Instance, false); }
                 if (arrione == "8") { a8.Draw(Direct3DProvider.Instance, false); }
                 if (arrione == "9") { a9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 260, -height / 4 - 80, 0));//arrive２個め
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 260, -height / 2 + 80, 0));//arrive２個め
                 if (arritwo == "0") { a0.Draw(Direct3DProvider.Instance, false); }
                 if (arritwo == "1") { a1.Draw(Direct3DProvider.Instance, false); }
                 if (arritwo == "2") { a2.Draw(Direct3DProvider.Instance, false); }
@@ -181,9 +185,9 @@ namespace MetroDrive
                 if (arritwo == "7") { a7.Draw(Direct3DProvider.Instance, false); }
                 if (arritwo == "8") { a8.Draw(Direct3DProvider.Instance, false); }
                 if (arritwo == "9") { a9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 230, -height / 4 - 80, 0));
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 230, -height / 2 + 80, 0));
                 arvColon.Draw(Direct3DProvider.Instance, false);
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 200, -height / 4 - 80, 0));//arrive３個目
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 200, -height / 2 + 80, 0));//arrive３個目
                 if (arrithr == "0") { a0.Draw(Direct3DProvider.Instance, false); }
                 if (arrithr == "1") { a1.Draw(Direct3DProvider.Instance, false); }
                 if (arrithr == "2") { a2.Draw(Direct3DProvider.Instance, false); }
@@ -194,7 +198,7 @@ namespace MetroDrive
                 if (arrithr == "7") { a7.Draw(Direct3DProvider.Instance, false); }
                 if (arrithr == "8") { a8.Draw(Direct3DProvider.Instance, false); }
                 if (arrithr == "9") { a9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 160, -height / 4 - 80, 0));//now
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 160, -height / 2 + 80, 0));//now
                 if (arrifou == "0") { a0.Draw(Direct3DProvider.Instance, false); }
                 if (arrifou == "1") { a1.Draw(Direct3DProvider.Instance, false); }
                 if (arrifou == "2") { a2.Draw(Direct3DProvider.Instance, false); }
@@ -205,9 +209,9 @@ namespace MetroDrive
                 if (arrifou == "7") { a7.Draw(Direct3DProvider.Instance, false); }
                 if (arrifou == "8") { a8.Draw(Direct3DProvider.Instance, false); }
                 if (arrifou == "9") { a9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 130, -height / 4 - 80, 0));//now
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 130, -height /2+80, 0));//now
                 arvColon.Draw(Direct3DProvider.Instance, false);
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 100, -height / 4 - 80, 0));//now
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 100, -height / 2 + 80, 0));//now
                 if (arrifiv == "0") { a0.Draw(Direct3DProvider.Instance, false); }
                 if (arrifiv == "1") { a1.Draw(Direct3DProvider.Instance, false); }
                 if (arrifiv == "2") { a2.Draw(Direct3DProvider.Instance, false); }
@@ -218,7 +222,7 @@ namespace MetroDrive
                 if (arrifiv == "7") { a7.Draw(Direct3DProvider.Instance, false); }
                 if (arrifiv == "8") { a8.Draw(Direct3DProvider.Instance, false); }
                 if (arrifiv == "9") { a9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 60, -height / 4 - 80, 0));//now
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 60, -height / 2 + 80, 0));//now
                 if (arrisix == "0") { a0.Draw(Direct3DProvider.Instance, false); }
                 if (arrisix == "1") { a1.Draw(Direct3DProvider.Instance, false); }
                 if (arrisix == "2") { a2.Draw(Direct3DProvider.Instance, false); }
@@ -229,7 +233,7 @@ namespace MetroDrive
                 if (arrisix == "7") { a7.Draw(Direct3DProvider.Instance, false); }
                 if (arrisix == "8") { a8.Draw(Direct3DProvider.Instance, false); }
                 if (arrisix == "9") { a9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 300, -height / 4, 0));//now
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 300, -height / 2+160, 0));//now
                 if (nowone == "0") { n0.Draw(Direct3DProvider.Instance, false); }
                 if (nowone == "1") { n1.Draw(Direct3DProvider.Instance, false); }
                 if (nowone == "2") { n2.Draw(Direct3DProvider.Instance, false); }
@@ -240,7 +244,7 @@ namespace MetroDrive
                 if (nowone == "7") { n7.Draw(Direct3DProvider.Instance, false); }
                 if (nowone == "8") { n8.Draw(Direct3DProvider.Instance, false); }
                 if (nowone == "9") { n9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 260, -height / 4, 0));//now
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 260, -height / 2+160, 0));//now
                 if (nowtwo == "0") { n0.Draw(Direct3DProvider.Instance, false); }
                 if (nowtwo == "1") { n1.Draw(Direct3DProvider.Instance, false); }
                 if (nowtwo == "2") { n2.Draw(Direct3DProvider.Instance, false); }
@@ -251,9 +255,9 @@ namespace MetroDrive
                 if (nowtwo == "7") { n7.Draw(Direct3DProvider.Instance, false); }
                 if (nowtwo == "8") { n8.Draw(Direct3DProvider.Instance, false); }
                 if (nowtwo == "9") { n9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 230, -height / 4, 0));
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 230, -height / 2+160, 0));
                 nowColon.Draw(Direct3DProvider.Instance, false);
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 200, -height / 4, 0));//now
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 200, -height / 2+160, 0));//now
                 if (nowthr == "0") { n0.Draw(Direct3DProvider.Instance, false); }
                 if (nowthr == "1") { n1.Draw(Direct3DProvider.Instance, false); }
                 if (nowthr == "2") { n2.Draw(Direct3DProvider.Instance, false); }
@@ -264,7 +268,7 @@ namespace MetroDrive
                 if (nowthr == "7") { n7.Draw(Direct3DProvider.Instance, false); }
                 if (nowthr == "8") { n8.Draw(Direct3DProvider.Instance, false); }
                 if (nowthr == "9") { n9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 160, -height / 4, 0));//now
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 160, -height / 2+160, 0));//now
                 if (nowfou == "0") { n0.Draw(Direct3DProvider.Instance, false); }
                 if (nowfou == "1") { n1.Draw(Direct3DProvider.Instance, false); }
                 if (nowfou == "2") { n2.Draw(Direct3DProvider.Instance, false); }
@@ -275,9 +279,9 @@ namespace MetroDrive
                 if (nowfou == "7") { n7.Draw(Direct3DProvider.Instance, false); }
                 if (nowfou == "8") { n8.Draw(Direct3DProvider.Instance, false); }
                 if (nowfou == "9") { n9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 130, -height / 4, 0));
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 130, -height / 2+160, 0));
                 nowColon.Draw(Direct3DProvider.Instance, false);
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 100, -height / 4, 0));//now
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 100, -height / 2+160, 0));//now
                 if (nowfiv == "0") { n0.Draw(Direct3DProvider.Instance, false); }
                 if (nowfiv == "1") { n1.Draw(Direct3DProvider.Instance, false); }
                 if (nowfiv == "2") { n2.Draw(Direct3DProvider.Instance, false); }
@@ -288,7 +292,7 @@ namespace MetroDrive
                 if (nowfiv == "7") { n7.Draw(Direct3DProvider.Instance, false); }
                 if (nowfiv == "8") { n8.Draw(Direct3DProvider.Instance, false); }
                 if (nowfiv == "9") { n9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 60, -height / 4, 0));//now
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 60, -height / 2+160, 0));//now
                 if (nowsix == "0") { n0.Draw(Direct3DProvider.Instance, false); }
                 if (nowsix == "1") { n1.Draw(Direct3DProvider.Instance, false); }
                 if (nowsix == "2") { n2.Draw(Direct3DProvider.Instance, false); }
@@ -299,11 +303,23 @@ namespace MetroDrive
                 if (nowsix == "7") { n7.Draw(Direct3DProvider.Instance, false); }
                 if (nowsix == "8") { n8.Draw(Direct3DProvider.Instance, false); }
                 if (nowsix == "9") { n9.Draw(Direct3DProvider.Instance, false); }
-                device.SetTransform(TransformState.World, Matrix.Translation(width / 2, -height / 4, 0));
-                meter.Draw(Direct3DProvider.Instance, false);
                 device.SetTransform(TransformState.World, Matrix.Translation(-width / 2 + 10, -height / 2 + 180, 0));
-                ato.Draw(Direct3DProvider.Instance, false);
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 2 + 160, -height / 2 + 50, 0));
+                if(Math.Abs(nowLocation - NeXTLocation)<Goukakuhani)
+                {
+                    teisiiti.Draw(Direct3DProvider.Instance, false);
+                }
+                else
+                {
+                    if (NeXTLocation < nowLocation)
+                    {
+                        over.Draw(Direct3DProvider.Instance, false);
+                    }
+                    else
+                    {
+                        ato.Draw(Direct3DProvider.Instance, false);
+                    }
+                }
+                device.SetTransform(TransformState.World, Matrix.Translation(-width / 2 + 200, -height / 2 +60, 0));
                 meter.Draw(Direct3DProvider.Instance, false);
                 if (Math.Abs(NeXTLocation - nowLocation) >= 1000)
                 {
@@ -450,7 +466,7 @@ namespace MetroDrive
             nowfou = now.Substring(3, 1);
             nowfiv = now.Substring(4, 1);
             nowsix = now.Substring(5, 1);
-            next = Convert.ToInt32(Math.Abs(NeXTLocation - nowLocation)).ToString();
+            next = ((int)Math.Abs(NeXTLocation - nowLocation)).ToString();
             nextone = next[0].ToString();
             if (NeXTLocation - nowLocation >= 10) { nexttwo = next[1].ToString(); }
             if (NeXTLocation - nowLocation >= 100) { nextthr = next[2].ToString(); }
