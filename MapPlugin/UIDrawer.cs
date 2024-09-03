@@ -214,7 +214,7 @@ namespace MetroDrive
                     if (lifeone == "8") { l8.Draw(Direct3DProvider.Instance, false); }
                     if (lifeone == "9") { l9.Draw(Direct3DProvider.Instance, false); }
                 }
-                device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4 + 80, 0));
+                device.SetTransform(TransformState.World, Matrix.Translation(width / 2 -450, -height / 2 + 250, 0));
                 lifeModel.Draw(Direct3DProvider.Instance, false);
             }
         }

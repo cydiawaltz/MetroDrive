@@ -18,10 +18,8 @@ using System.Threading.Tasks;
 namespace MetroDrive.MapPlugin
 {
     [Plugin(PluginType.MapPlugin)]
-    internal class MapPluginMain : AssemblyPluginBase
+    public class MapPluginMain : AssemblyPluginBase
     {
-        //共有メモリ
-        //MemoryMappedFileViewAccessor sendtounity;
         int index;
         double NeXTLocation;
         double nowLocation;
@@ -53,19 +51,16 @@ namespace MetroDrive.MapPlugin
         bool isRestart;
         bool isFixOver;//「停止位置を修正します」みたいな感じのウィザード
         int time;
-        bool isBonus;//ボーナスがある時はこれで時刻表を追加する
+        bool isBonus;//ボーナスがある時はこれで時刻表を追加する ->　これの時は条件付きでEndGameを茅場町で飛ばす
         bool isTimeOut;
         bool isTaiken;
         int pointerIndex;
-        bool isEnterPressed;
+        bool isEnterPressed; 
         bool isExitScenario;
         bool isVoiceOn;
-        int addStaPosi;
-        int addStaArrival;
         bool isUIOff;
-        bool isGame;//ゲーム実行中意外はFormをオフに
+        //bool isGame;//ゲーム実行中意外はFormをオフに ->拡張機能の方に移植
         bool isPause;
-        Task task;
         int timer;
         int nativepower;
         int nativebrake;
@@ -92,56 +87,17 @@ namespace MetroDrive.MapPlugin
             Statement levelStatement = statementSet.FindUserStatement("Wattz",metroFilter,new ClauseFilter("Level",ClauseType.Function));
             Statement bonusStatement = statementSet.FindUserStatement("Wattz", metroFilter, new ClauseFilter("isBonus", ClauseType.Function));
             Statement taikenStatement = statementSet.FindUserStatement("Wattz", metroFilter, new ClauseFilter("isTaiken", ClauseType.Function));
-            Statement locationStatement = statementSet.FindUserStatement("Wattz", metroFilter, new ClauseFilter("addedLocation", ClauseType.Function));
-            Statement arrivalStatement = statementSet.FindUserStatement("Wattz", metroFilter, new ClauseFilter("addedArrival", ClauseType.Function));
+            //Statement locationStatement = statementSet.FindUserStatement("Wattz", metroFilter, new ClauseFilter("addedLocation", ClauseType.Function));
+            //Statement arrivalStatement = statementSet.FindUserStatement("Wattz", metroFilter, new ClauseFilter("addedArrival", ClauseType.Function));
+            Statement kayabaStatement = statementSet.FindUserStatement("Wattz", metroFilter, new ClauseFilter("isKayaba", ClauseType.Function));
             //keysはstru~[].putの[]のなか
-            if (levelStatement.Source.Clauses[4].Args[0].ToString() == "Easy")
+            /*if (levelStatement.Source.Clauses[4].Args[0].ToString() == "Easy")
             {
                 life.OnStartEasy();
-            }
-
-            //life.OnStartEasy();
-            /*Namespace ns = Namespace.GetUserNamespace("CydiaWaltz").Child("MetroDrive");
-            Identifier difficulty = new Identifier(ns, "Level");
-            IReadOnlyList<IHeader> headers = BveHacker.MapHeaders.GetAll(difficulty);
-            for (int i = 0; i < headers.Count; i++)
-            {
-                IHeader header = headers[i];
-                if (header.Name.FullName == "Easy") { life.OnStartEasy(); }
-            }
-            Identifier bonusCheck = new Identifier(ns, "isBonus");
-            IReadOnlyList<IHeader> bheader = BveHacker.MapHeaders.GetAll(bonusCheck);
-            for (int i = 0; i < bheader.Count; i++)
-            {
-                IHeader header = bheader[i];
-                if (header.Name.FullName == "true") { isBonus = true; }
-                else { isBonus = false; }
-            }
-            Identifier taikenCheck = new Identifier(ns, "isTaiken");
-            IReadOnlyList<IHeader> cheader = BveHacker.MapHeaders.GetAll(taikenCheck);
-            for (int i = 0; i < cheader.Count; i++)
-            {
-                IHeader header = cheader[i];
-                if (header.Name.FullName == "true") { isTaiken = true; }
-                else { isTaiken = false; }
-            }
-            Identifier addStationLocation = new Identifier(ns, "addLocation");
-            IReadOnlyList<IHeader> dheader = BveHacker.MapHeaders.GetAll(addStationLocation);
-            for (int i = 0; i < dheader.Count; i++)
-            {
-                IHeader header = dheader[i];
-                addStaPosi = int.Parse(header.Name.FullName);
-            }
-            Identifier addStationArrival = new Identifier(ns, "addArrival");
-            IReadOnlyList<IHeader> eheader = BveHacker.MapHeaders.GetAll(addStationArrival);
-            for (int i = 0; i < eheader.Count; i++)
-            {
-                IHeader header = eheader[i];
-                TimeSpan a = TimeSpan.Parse(header.Name.FullName);
-                addStaArrival = (int)a.TotalMilliseconds;
             }*/
-            //MemoryMappedFile a = MemoryMappedFile.CreateNew("ScenarioOpen", 4096);
-            //sendtounity = a.CreateViewAccessor();
+            life.OnStartEasy();//仮
+
+
             ClassMemberSet assistantDrawerMembers = BveHacker.BveTypes.GetClassInfoOf<AssistantDrawer>();
             FastMethod drawMethod = assistantDrawerMembers.GetSourceMethodOf(nameof(AssistantDrawer.Draw));
             HarmonyPatch drawPatch = HarmonyPatch.Patch(Name, drawMethod.Source, PatchType.Prefix);
@@ -161,13 +117,6 @@ namespace MetroDrive.MapPlugin
             InputEventArgs inputEventArgs = new InputEventArgs(-2, 15);
             BveHacker.KeyProvider.KeyDown_Invoke(inputEventArgs);
             BveHacker.KeyProvider.KeyUp_Invoke(inputEventArgs);
-            //毎秒実行
-            //System.Windows.Forms.Timer ftimer = new System.Windows.Forms.Timer();
-            
-            System.Timers.Timer ftimer = new System.Timers.Timer(1000);
-            ftimer.Elapsed += FlagBuilder;
-            //ftimer.Tick += FlagBuilder;
-            ftimer.Start();
             isTimeOut = false;
             //MessageBox.Show("MetroDriveプラグインが読み込まれました");
             //NamedPipe((int)NeXTLocation);
@@ -183,7 +132,7 @@ namespace MetroDrive.MapPlugin
             totalElapsed += elapsed;
             if(totalElapsed.TotalSeconds >= 1)
             {
-                //しょり
+                FlagBuilder();
                 totalElapsed -= TimeSpan.FromSeconds(1);
             }
             var station = BveHacker.Scenario.Route.Stations[index] as Station;
@@ -209,7 +158,9 @@ namespace MetroDrive.MapPlugin
             arrive = station.DepartureTime.ToString("hhmmss");
             if(brake > 0||nativebrake > 0)
             {
-                power = 0;
+                //power = 0;
+                //nativepower = 0;
+                BveHacker.Scenario.Vehicle.Instruments.Cab.Handles.PowerNotch = 0;
             }
             if (pass == true && NeXTLocation == nowLocation)
             {
@@ -220,9 +171,7 @@ namespace MetroDrive.MapPlugin
             uIDrawer.tick(life.life);
             if (isExitScenario)
             {
-                //情報を送り、BVEのFormを非表示にする
-
-                BveHacker.MainForm.UnloadScenario();
+                sharedMes = "Exit";
             }
             timer++;
             if(timer == 2)//1だと動かない（うさぷら側の仕様？？）
@@ -230,6 +179,7 @@ namespace MetroDrive.MapPlugin
                 InputEventArgs inputEventArgs2 = new InputEventArgs(2, 8);
                 BveHacker.KeyProvider.LeverMoved_Invoke(inputEventArgs2);
             }
+            
             return new MapPluginTickResult();
         }
         public void BeaconPassed(BeaconPassedEventArgs e)
@@ -278,7 +228,7 @@ namespace MetroDrive.MapPlugin
                     break;
             }
         }
-        void FlagBuilder(object sender, EventArgs e)
+        void FlagBuilder()
         {
             if (speed < atc && power > 0) { isOverATC = true; }
             if (nowMilli - arriveMilli < 0)
@@ -303,7 +253,6 @@ namespace MetroDrive.MapPlugin
             { isEBStop = true; }
             if (brake == EB && speed > 5 && NeXTLocation - nowLocation >= 150)
             { isEB = true; }
-            life.life--;
         }
         void OnStop()//停車時に一回だけ呼び出される
         {
@@ -325,22 +274,15 @@ namespace MetroDrive.MapPlugin
             if (e.KeyCode == Keys.Return) { isEnterPressed = true; }
             if(e.KeyCode == Keys.R)
             {
-                if(isUIOff)
-                {
-                    isUIOff = false;
-                }
-                else
-                {
-                    isUIOff = true;
-                }
+                isUIOff = !isUIOff;
             }
         }
-        void EndScenario()
+        /*void EndScenario()
         {
             sharedMes = "endscenario";
             BveHacker.MainForm.UnloadScenario();
             BveHacker.MainFormSource.Hide();
-        }
+        }*/
         void FlagStart()
         {
             isOverATC = false;
@@ -363,7 +305,7 @@ namespace MetroDrive.MapPlugin
             //UserVehicleLocationManager.SetLocation(NeXTLocation,false);//距離呈の変更
 
         }
-        public void OnAddStation()
+        /*public void OnAddStation()
         {
             StationList stations = BveHacker.Scenario.Route.Stations;
             try
@@ -383,11 +325,7 @@ namespace MetroDrive.MapPlugin
                 //BVEを終了するメソッドを呼び出
                 EndScenario();
             }
-        }
-        void FormControll()
-        {
-
-        }
+        }*/
         /*void LoadScenario(string path)
         {
             BveHacker.MainForm.OpenScenario(path);
