@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AtsEx.PluginHost.Native;
 
@@ -16,7 +17,7 @@ namespace MetroDrive
         public int restart;
         public int EBbrake;
         //public int EB;
-        public bool isEBbrake;
+        public bool isEB;
         public int EBstop;
         public bool isEBStop;//駅構内でEBを使用したとき
         //加点
@@ -30,11 +31,12 @@ namespace MetroDrive
         public bool isBonus;//ボーナス（各死刑的）
         public int life;
         //その他
-        public int GoukakuHani;
+        //public int GoukakuHani;
         //以下同じ
         public int atc;
         public bool HideHorn;
-        public void OnStartFreeRun()//初期化
+        public bool isOverSound;
+        public void OnStartFreeRun(int goukakuHani)//初期化
         {
             //難しさごとに変更（現在:初級）
             life = 999;
@@ -50,12 +52,12 @@ namespace MetroDrive
             great = 0;//Grate!停車
             bonus = 0;//ボーナス
             //その他
-            GoukakuHani = 200;//合格範囲
+            goukakuHani = 200;//合格範囲
             //以下共通設定
             atc = 110;
             HideHorn = false;
         }
-        public void OnStartElement()//初期化
+        public void OnStartElement(int goukakuHani)//初期化
         {
             //難しさごとに変更（現在:初級）
             life = 999;
@@ -71,12 +73,12 @@ namespace MetroDrive
             great = 0;//Grate!停車
             bonus = 0;//ボーナス
             //その他
-            GoukakuHani = 8;//合格範
+            goukakuHani = 8;//合格範
             //以下共通設定
             atc = 110;
             HideHorn = false;
         }
-        public void OnStartEasy()//初期化
+        public void OnStartEasy(int goukakuHani)//初期化
         {
             //難しさごとに変更（現在:初級）
             life = 50;
@@ -92,12 +94,12 @@ namespace MetroDrive
             great = 5;//Grate!停車
             bonus = 2;//ボーナス
             //その他
-            GoukakuHani = 4;//合格範囲
+            goukakuHani = 4;//合格範囲
             //以下共通設定
             atc = 110;
             HideHorn = false;
         }
-        public void OnStartNormal()//初期化
+        public void OnStartNormal(int GoukakuHani)//初期化
         {
             //難しさごとに変更（現在:初級）
             life = 40;
@@ -118,7 +120,7 @@ namespace MetroDrive
             atc = 110;
             HideHorn = false;
         }
-        public void OnStartHard()//初期化
+        public void OnStartHard(int GoukakuHani)//初期化
         {
             //難しさごとに変更（現在:初級）
             life = 30;
@@ -139,7 +141,7 @@ namespace MetroDrive
             atc = 80;
             HideHorn = false;
         }
-        public void OnStartVeryHard()//初期化
+        public void OnStartVeryHard(int GoukakuHani)//初期化
         {
             //難しさごとに変更（現在:初級）
             life = 10;
@@ -163,19 +165,14 @@ namespace MetroDrive
 
         public void NewUpdate(bool isOverATC, bool isDelay, bool isEB, bool isTeituu, bool isGood, bool isGreat, bool isEBStop, bool isOverRun, double nowLocation, double NeXTLocation, bool isRestart)
         {
-            if (isOverATC == true)
-            {
-                life -= overatc;
-                isOverATC = false;
-            }
             if (isDelay == true)
             {
-                life -= overtime;
+                Decrease(overtime);
                 isDelay = false;
             }
             if (isEB == true)
             {
-                life -= EBbrake;
+                Decrease(EBbrake);
                 isEB = false;
             }
             if (isTeituu == true)
@@ -195,25 +192,26 @@ namespace MetroDrive
             }
             if (isEBStop == true)
             {
-                life -= EBstop;
+                Decrease(EBstop);
                 isEBStop = false;
-            }
-            if (isOverRun == true)
-            {
-                int overrun = Convert.ToInt32(nowLocation - NeXTLocation);
-                life -= overrun;
-                isOverRun = false;
             }
             if (isRestart == true)
             {
-                life -= restart;
+                Decrease(restart);
                 isRestart = false;
             }
         }
-        static async void Delay(int e)
+        public void Decrease(int minus)
         {
-            await Task.Delay(e);
-            return;
+            if(minus < life)
+            {
+                life -= minus;
+            }
+            else
+            {
+                life = 0;
+                isOverSound = true;
+            }
         }
         public void OnHorn(HornBlownEventArgs e)//警笛イベントのときに呼ばれる
         {
@@ -221,8 +219,6 @@ namespace MetroDrive
             {
                 life += bonus;
                 isBonus = true;
-                Delay(1000);
-                isBonus = false;
             }
         }
     }

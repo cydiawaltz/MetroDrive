@@ -139,7 +139,7 @@ namespace MetroDrive
                 int height = Direct3DProvider.Instance.PresentParameters.BackBufferHeight;
                 if (life >= 100)
                 {
-                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4, 0));
+                    device.SetTransform(TransformState.World, Matrix.Translation(width / 2-150, -height / 2+250, 0));
                     if (lifeone == "0") { l0.Draw(Direct3DProvider.Instance, false); }
                     if (lifeone == "1") { l1.Draw(Direct3DProvider.Instance, false); }
                     if (lifeone == "2") { l2.Draw(Direct3DProvider.Instance, false); }
@@ -150,7 +150,7 @@ namespace MetroDrive
                     if (lifeone == "7") { l7.Draw(Direct3DProvider.Instance, false); }
                     if (lifeone == "8") { l8.Draw(Direct3DProvider.Instance, false); }
                     if (lifeone == "9") { l9.Draw(Direct3DProvider.Instance, false); }
-                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4, 0));
+                    device.SetTransform(TransformState.World, Matrix.Translation(width / 2-110, -height / 2+250, 0));
                     if (lifetwo == "0") { l0.Draw(Direct3DProvider.Instance, false); }
                     if (lifetwo == "1") { l1.Draw(Direct3DProvider.Instance, false); }
                     if (lifetwo == "2") { l2.Draw(Direct3DProvider.Instance, false); }
@@ -161,7 +161,7 @@ namespace MetroDrive
                     if (lifetwo == "7") { l7.Draw(Direct3DProvider.Instance, false); }
                     if (lifetwo == "8") { l8.Draw(Direct3DProvider.Instance, false); }
                     if (lifetwo == "9") { l9.Draw(Direct3DProvider.Instance, false); }
-                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4, 0));
+                    device.SetTransform(TransformState.World, Matrix.Translation(width / 2-70, -height / 2+250, 0));
                     if (lifethree == "0") { l0.Draw(Direct3DProvider.Instance, false); }
                     if (lifethree == "1") { l1.Draw(Direct3DProvider.Instance, false); }
                     if (lifethree == "2") { l2.Draw(Direct3DProvider.Instance, false); }
@@ -173,9 +173,9 @@ namespace MetroDrive
                     if (lifethree == "8") { l8.Draw(Direct3DProvider.Instance, false); }
                     if (lifethree == "9") { l9.Draw(Direct3DProvider.Instance, false); }
                 }
-                if (life >= 10 && life < 100)
+                if (life > 10 && life < 100)
                 {
-                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4, 0));
+                    device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 110, -height / 2+250, 0));
                     if (lifeone == "0") { l0.Draw(Direct3DProvider.Instance, false); }
                     if (lifeone == "1") { l1.Draw(Direct3DProvider.Instance, false); }
                     if (lifeone == "2") { l2.Draw(Direct3DProvider.Instance, false); }
@@ -186,7 +186,7 @@ namespace MetroDrive
                     if (lifeone == "7") { l7.Draw(Direct3DProvider.Instance, false); }
                     if (lifeone == "8") { l8.Draw(Direct3DProvider.Instance, false); }
                     if (lifeone == "9") { l9.Draw(Direct3DProvider.Instance, false); }
-                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 4 + 10, -height / 4, 0));
+                    device.SetTransform(TransformState.World, Matrix.Translation(width / 2 -70, -height / 2 + 250, 0));
                     if (lifetwo == "0") { l0.Draw(Direct3DProvider.Instance, false); }
                     if (lifetwo == "1") { l1.Draw(Direct3DProvider.Instance, false); }
                     if (lifetwo == "2") { l2.Draw(Direct3DProvider.Instance, false); }
@@ -198,11 +198,18 @@ namespace MetroDrive
                     if (lifetwo == "8") { l8.Draw(Direct3DProvider.Instance, false); }
                     if (lifetwo == "9") { l9.Draw(Direct3DProvider.Instance, false); }
                 }
+                if(life == 10)
+                {
+                    device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 110, -height / 2 + 250, 0));
+                    l1.Draw(Direct3DProvider.Instance, false);
+                    device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 70, -height / 2 + 250, 0));
+                    l0.Draw(Direct3DProvider.Instance, false);
+                }
                 if (life < 10)
                 {
-                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4, 0));
+                    device.SetTransform(TransformState.World, Matrix.Translation(width / 2-110, -height / 2+250, 0));
                     l0.Draw(Direct3DProvider.Instance, false);
-                    device.SetTransform(TransformState.World, Matrix.Translation(-width / 4, -height / 4, 0));
+                    device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 70, -height / 2+250, 0));
                     if (lifeone == "0") { l0.Draw(Direct3DProvider.Instance, false); }
                     if (lifeone == "1") { l1.Draw(Direct3DProvider.Instance, false); }
                     if (lifeone == "2") { l2.Draw(Direct3DProvider.Instance, false); }
@@ -214,23 +221,31 @@ namespace MetroDrive
                     if (lifeone == "8") { l8.Draw(Direct3DProvider.Instance, false); }
                     if (lifeone == "9") { l9.Draw(Direct3DProvider.Instance, false); }
                 }
+                if(life<=0)
+                {
+                    device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 110, -height / 2 + 250, 0));
+                    l0.Draw(Direct3DProvider.Instance, false);
+                    device.SetTransform(TransformState.World, Matrix.Translation(width / 2 - 70, -height / 2 + 250, 0));
+                    l0.Draw(Direct3DProvider.Instance, false);
+                }
                 device.SetTransform(TransformState.World, Matrix.Translation(width / 2 -450, -height / 2 + 250, 0));
                 lifeModel.Draw(Direct3DProvider.Instance, false);
             }
         }
         public TickResult tick(int life)
         {
-            lifeone = life.ToString().Substring(0, 1);
+            if(life > 0)
+            {
+                lifeone = life.ToString().Substring(0, 1);
+            }
             if(life >10)
             {
                 lifetwo = life.ToString().Substring(1, 1);
             }
-            else { lifetwo = "You can (not) advance."; }
             if(life >100)
             {
                 lifethree = life.ToString().Substring(2, 1);
             }
-            else { lifethree = "You can (not) redo."; }
             return new MapPluginTickResult();
         }
     }
