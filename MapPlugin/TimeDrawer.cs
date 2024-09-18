@@ -13,7 +13,7 @@ using System.Reflection;
 
 namespace MetroDrive
 {
-    internal class TimeDrawer//このクラスでは、
+    internal class TimeDrawer : IDisposable//このクラスでは、
     {
         //public string Location;
         public float width;
@@ -149,6 +149,12 @@ namespace MetroDrive
                 return brakeNotch;
             }
         }
+
+        public void Dispose()
+        {
+            //ここはいつか配列になおしてdisposeする  検索 => Todo
+        }
+
         public void Patch(double NeXTLocation,double nowLocation,bool isUIOff,double Goukakuhani)//まずこれを呼ぶ
         {
             if(isUIOff == false)

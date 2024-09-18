@@ -19,6 +19,7 @@ using AtsEx.Extensions.SoundFactory;
 using static System.Collections.Specialized.BitVector32;
 using AtsEx.PluginHost.Sound;
 using AtsEx.PluginHost;
+using SlimDX.Direct3D9;
 
 namespace MetroDrive.MapPlugin
 {
@@ -51,7 +52,6 @@ namespace MetroDrive.MapPlugin
         bool isDelay;
         bool isEB;
         bool isTeituu;
-        bool isGood;
         bool isGreat;
         bool isEBStop;
         bool isOverRun;//「停止位置を修正します」みたいな感じのウィザード
@@ -59,7 +59,7 @@ namespace MetroDrive.MapPlugin
         int time;
         bool isBonus;//ボーナスがある時はこれで時刻表を追加する ->　これの時は条件付きでEndGameを茅場町で飛ばす
         bool isTimeOut;
-        bool isTaiken;
+        bool isTaiken = false;//体験版
         int pointerIndex;
         bool isEnterPressed; 
         bool isExitScenario;
@@ -80,9 +80,13 @@ namespace MetroDrive.MapPlugin
         string stationName;
         string leaveStationName;
         TimeSpan totalElapsed = TimeSpan.Zero;
+        TimeSpan taikenElapsed = TimeSpan.Zero;
         ISoundFactory soundFactory;
         Sound sound;//test
         HarmonyPatch drawPatch;
+        bool isAuto;
+        double oldSpeed;//1F前の速度
+        bool isOverEnd = false;
         public MapPluginMain(PluginBuilder builder) : base(builder)
         {
             if (!System.Diagnostics.Debugger.IsAttached)
@@ -141,10 +145,10 @@ namespace MetroDrive.MapPlugin
         private PatchInvokationResult DrawPatch_Invoked(object sender, PatchInvokedEventArgs e)
         {
             timeDrawer.Patch(NeXTLocation, nowLocation, isUIOff, goukakuhani);
-            uIDrawer.UIDraw(power, nativebrake, EB, life.isTeituu, life.life, isUIOff);
+            uIDrawer.UIDraw(power, nativebrake, EB, life.isTeituu, life.life, isUIOff,isAuto);
             uIDrawer.LifeDraw(life.life, isUIOff);
             pause.PauseMenuDrawer(pointerIndex, isEnterPressed, isExitScenario, isVoiceOn, isUIOff);
-            keikoku.Patch(isEB,isEBStop,isOverRun,isRestart,speed);
+            keikoku.Patch(isEB,isEBStop,isOverRun,isRestart,speed,BveHacker.Scenario.Vehicle.Doors.AreAllClosed);
             return PatchInvokationResult.DoNothing(e);
         }
 
@@ -163,6 +167,7 @@ namespace MetroDrive.MapPlugin
                 FlagBuilder();
                 totalElapsed -= TimeSpan.FromSeconds(1);
             }
+            OnStop();
             var station = BveHacker.Scenario.Route.Stations[index] as Station;
             if (station == null)
             {
@@ -187,6 +192,7 @@ namespace MetroDrive.MapPlugin
             power = BveHacker.Scenario.Vehicle.Instruments.Cab.Handles.PowerNotch;//入力の方
             brake = BveHacker.Scenario.Vehicle.Instruments.Cab.Handles.BrakeNotch;
             nowMilli = BveHacker.Scenario.TimeManager.TimeMilliseconds;//Now
+            oldSpeed = speed;
             speed = Native.VehicleState.Speed;//speed
             now = BveHacker.Scenario.TimeManager.Time.ToString("hhmmss");
             arrive = station.DepartureTime.ToString("hhmmss");
@@ -196,9 +202,15 @@ namespace MetroDrive.MapPlugin
             }
             if(brake > 0||nativebrake > 0)
             {
-                //power = 0;
-                //nativepower = 0;
                 BveHacker.Scenario.Vehicle.Instruments.Cab.Handles.PowerNotch = 0;
+            }
+            if(!(brake == nativebrake))
+            {
+                isAuto = true;
+            }
+            else
+            {
+                isAuto= false;
             }
             if (pass == true && NeXTLocation == nowLocation)
             {
@@ -238,6 +250,26 @@ namespace MetroDrive.MapPlugin
                     life.isOverSound = false;
                 }
             }
+            if (isTaiken)
+            {
+                if (taikenElapsed.TotalSeconds < 35){taikenElapsed += elapsed;}
+                if(taikenElapsed.TotalSeconds > 33 && keikoku.isTaikenStart){keikoku.TaikenStart(power, brake);}
+                if (taikenElapsed.TotalSeconds > 33 && keikoku.isAtcIntro){keikoku.TaikenATC(); }
+                if (taikenElapsed.TotalSeconds > 33 && keikoku.isCheckAtc) {keikoku.CheckAtc(speed);}
+                if (taikenElapsed.TotalSeconds < 33){keikoku.TaikenUpdate(taikenElapsed);}
+                if(life.life == 0) { 
+                    keikoku.TaikenEnd(false,Location); }
+                if (isOverEnd)
+                {
+                    double speedMS = BveHacker.Scenario.LocationManager.SpeedMeterPerSecond;
+                    if(speed > 10)
+                    {
+                        BveHacker.Scenario.LocationManager.SetSpeed(speedMS - 0.1);
+                    }
+                    BveHacker.Scenario.Vehicle.Instruments.Cab.Handles.BrakeNotch = 8;
+                }
+                //if(keikoku.clear&&speed == 0) { keikoku.TaikenEnd(true); }
+            }
             return new MapPluginTickResult();
         }
         public void BeaconPassed(BeaconPassedEventArgs e)
@@ -265,6 +297,39 @@ namespace MetroDrive.MapPlugin
                     break;
                 case 26://Atc80
                     atc = 80;
+                    break;
+                case 800://ダイアログ開始
+                    isTaiken = true;
+                    life.istaiken = true;
+                    keikoku.isTaikenStart = true;
+                    break;
+                case 801:
+                    keikoku.isTaikenStart = false;
+                    keikoku.isAtcIntro = true;//ATCについての紹介
+                    break;
+                case 802:
+                    keikoku.isAtcIntro = false;
+                    keikoku.isCheckAtc = true;
+                    break;
+                case 803:
+                    keikoku.isCheckAtc = false;
+                    keikoku.TaikenStop();
+                    keikoku.next = true;
+                    break;
+                case 804://906番と同じように設置
+                    if(!isOverRun)
+                    {
+                        life.istaiken = false;
+                    }
+                    break;
+                case 805:
+                    keikoku.next = false;
+                    break;
+                case 806://終着地点の位置番手前
+                    keikoku.clear = true;
+                    break;
+                case 807:
+                    isOverEnd = true;
                     break;
                 case 900://隠し警笛開始
                     hideHorn = true;
@@ -296,13 +361,11 @@ namespace MetroDrive.MapPlugin
             isEB = false;
             isEBStop = false;
             isTeituu = false;
-            isGood = false;
-            isGreat = false;
             if (nowMilli - arriveMilli < 0)
             {
                 if (pass == true) {
                     if (Math.Abs(nowLocation - NeXTLocation) > goukakuhani)
-                    { isDelay = true; }
+                    { isDelay = true;}
                     if (Math.Abs(nowLocation - NeXTLocation) < goukakuhani && !(speed == 0))
                     { isDelay = true; }
                 }
@@ -314,7 +377,7 @@ namespace MetroDrive.MapPlugin
                     }
                 }
             }
-            if(!pass&&NeXTLocation<goukakuhani+nowLocation&&speed == 0)
+            if(!pass&&NeXTLocation<nowLocation-goukakuhani&&speed == 0&&BveHacker.Scenario.Vehicle.Doors.AreAllClosed)
             {
                 FixOverRun();
             }
@@ -324,12 +387,18 @@ namespace MetroDrive.MapPlugin
             { isEBStop = true; }
             if (brake == EB && speed > 0 && NeXTLocation - nowLocation >= 150)
             { isEB = true; }
-            if (Math.Abs(nowLocation - NeXTLocation) < 0.5 && Math.Abs(nowMilli - arriveMilli) >= 2000&&speed ==0&&BveHacker.Scenario.Vehicle.Doors.AreAllClosed)
-            { isGood = true; }
-            if (Math.Abs(nowLocation - NeXTLocation) < 0.5 && Math.Abs(nowMilli - arriveMilli) < 2000&&speed == 0)
-            { isGreat = true; }
-            life.NewUpdate(isOverATC, isDelay, isEB, isTeituu, isGood, isGreat, isEBStop, isOverRun, nowLocation, NeXTLocation, isRestart);
+            life.NewUpdate(isOverATC, isDelay, isEB, isTeituu, isGreat, isEBStop, isOverRun, nowLocation, NeXTLocation, isRestart);
         }
+        void OnStop()
+        {
+            if (Math.Abs(nowLocation - NeXTLocation) < 1 && Math.Abs(nowMilli - arriveMilli) >= 2000 && speed == 0 && oldSpeed > 0 && BveHacker.Scenario.Vehicle.Doors.AreAllClosed)
+            { life.Good(); keikoku.GoodGreat("good"); if (isTaiken) { keikoku.TaikenStoped(true, false, stationName,Location); } }
+            if (Math.Abs(nowLocation - NeXTLocation) < goukakuhani && speed == 0 && oldSpeed > 0 && BveHacker.Scenario.Vehicle.Doors.AreAllClosed)//事実上のOnStop??
+            { if (isTaiken) { keikoku.TaikenStoped(false, false, stationName, Location); } }
+            if (Math.Abs(nowLocation - NeXTLocation) < 1 && Math.Abs(nowMilli - arriveMilli) < 2000 && speed == 0 && oldSpeed > 0)
+            { isGreat = true; }
+        }
+
         void OnPass()
         {
             if (Math.Abs(arriveMilli - nowMilli) < 1000 && Math.Abs(NeXTLocation - nowLocation) < 5)
@@ -355,18 +424,24 @@ namespace MetroDrive.MapPlugin
             isEB = false;
             isEBStop = false;
             isTeituu = false;
-            isGood = false;
             isGreat = false;
         }
         void FixOverRun()//オーバーランを直す
         {
             int overrun = Convert.ToInt32(nowLocation - NeXTLocation);
-            life.Decrease(overrun);
+            if(life.istaiken)
+            {
+                life.Decrease(overrun);
+            }
             if(life.life>0)
             {
                 BveHacker.Scenario.LocationManager.SetLocation(NeXTLocation, false);//距離呈の変更
             }
             isOverRun = false;
+            if(isTaiken)
+            {
+                keikoku.TaikenStoped(false, true, stationName, Location);
+            }
         }
         
         /*

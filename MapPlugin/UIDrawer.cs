@@ -40,6 +40,8 @@ namespace MetroDrive
         Model l7;
         Model l8;
         Model l9;
+        Model autoB;
+        Model autoP;
         string lifeone;
         string lifetwo;
         string lifethree;
@@ -73,6 +75,8 @@ namespace MetroDrive
             l7 = CreatelifeModel("7");
             l8 = CreatelifeModel("8");
             l9 = CreatelifeModel("9");
+            autoB = CreateAnyModel(@"picture\autoB.png", -50, 0, 50, -225);
+            autoP = CreateAnyModel(@"picture\autop.png", 0, 0, 50, -225);
             Model CreatePowerModel(string notch)
             {
                 string texFilePath = Path.Combine(Path.GetDirectoryName(Location), @"picture\P" + notch + ".png");
@@ -102,7 +106,7 @@ namespace MetroDrive
                 return brakeNotch;
             }
         }
-        public void UIDraw(int power,int brake,int EB,bool isTeituu,int life,bool isUIOff)
+        public void UIDraw(int power,int brake,int EB,bool isTeituu,int life,bool isUIOff,bool isAuto)
         {
             if(isUIOff == false)
             {
@@ -115,6 +119,7 @@ namespace MetroDrive
                 if (power == 2) { p2.Draw(Direct3DProvider.Instance, false); }
                 if (power == 3) { p3.Draw(Direct3DProvider.Instance, false); }
                 if (power == 4) { p4.Draw(Direct3DProvider.Instance, false); }
+                if (isAuto) { autoP.Draw(Direct3DProvider.Instance, false); }
                 device.SetTransform(TransformState.World, Matrix.Translation(width / 2, height / 2, 0));//(float)Math.Sin(Native.VehicleState.Time.TotalSeconds)*100
                 if (brake == 0) { b0.Draw(Direct3DProvider.Instance, false); }
                 if (brake == 1) { b1.Draw(Direct3DProvider.Instance, false); }
@@ -126,6 +131,7 @@ namespace MetroDrive
                 if (brake == 7) { b7.Draw(Direct3DProvider.Instance, false); }
                 if (brake == 8) { b8.Draw(Direct3DProvider.Instance, false); }
                 if (brake == EB) { eb.Draw(Direct3DProvider.Instance, false); }
+                if (isAuto) { autoB.Draw(Direct3DProvider.Instance, false); }
                 device.SetTransform(TransformState.World, Matrix.Translation(0 / 2 - 200, 0 / 2 + 150, 0));
                 if (isTeituu == true) { teituu.Draw(Direct3DProvider.Instance, false); }
             }

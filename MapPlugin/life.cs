@@ -36,6 +36,8 @@ namespace MetroDrive
         public int atc;
         public bool HideHorn;
         public bool isOverSound;
+
+        public bool istaiken = false;//これは減点しないと設定するだけ(MainのisTaikenとは別物)
         public void OnStartFreeRun(int goukakuHani)//初期化
         {
             //難しさごとに変更（現在:初級）
@@ -163,7 +165,7 @@ namespace MetroDrive
             HideHorn = false;
         }
 
-        public void NewUpdate(bool isOverATC, bool isDelay, bool isEB, bool isTeituu, bool isGood, bool isGreat, bool isEBStop, bool isOverRun, double nowLocation, double NeXTLocation, bool isRestart)
+        public void NewUpdate(bool isOverATC, bool isDelay, bool isEB, bool isTeituu, bool isGreat, bool isEBStop, bool isOverRun, double nowLocation, double NeXTLocation, bool isRestart)
         {
             if (isDelay == true)
             {
@@ -179,11 +181,6 @@ namespace MetroDrive
             {
                 life += teitu;
                 isTeituu = false;
-            }
-            if (isGood == true)
-            {
-                life += good;
-                isGood = false;
             }
             if (isGreat == true)
             {
@@ -201,13 +198,17 @@ namespace MetroDrive
                 isRestart = false;
             }
         }
+        public void Good()
+        {
+            life+=good;
+        }
         public void Decrease(int minus)
         {
-            if(minus < life)
+            if(minus < life&&!istaiken)
             {
                 life -= minus;
             }
-            else
+            else if(!istaiken)
             {
                 life = 0;
                 isOverSound = true;
