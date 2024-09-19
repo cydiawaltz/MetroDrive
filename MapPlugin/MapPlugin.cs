@@ -268,6 +268,7 @@ namespace MetroDrive.MapPlugin
                     }
                     BveHacker.Scenario.Vehicle.Instruments.Cab.Handles.BrakeNotch = 8;
                 }
+                life.istaiken = keikoku.isTaikenLife;
                 //if(keikoku.clear&&speed == 0) { keikoku.TaikenEnd(true); }
             }
             return new MapPluginTickResult();

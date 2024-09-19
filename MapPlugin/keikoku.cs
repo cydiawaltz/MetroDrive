@@ -87,6 +87,7 @@ namespace MetroDrive.MapPlugin
         public bool isCheckAtc = false;
         public bool next = false;
         public bool clear = false;//Mainでしか使わない
+        public bool isTaikenLife = false;
         public void CreateModel(string Location)
         {
             eB = CreateModels(@"picture\keikoku\EB.png",-150,-60,300,120);
@@ -371,6 +372,7 @@ namespace MetroDrive.MapPlugin
             await Task.Delay(3000);
             if(stationName == "仲御徒町")
             {
+                isTaikenLife = false;
                 taikenDrawing = true;
                 taikenindex = 24;
                 await Task.Delay(6000);
