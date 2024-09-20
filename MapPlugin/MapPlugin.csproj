@@ -36,12 +36,6 @@
     <Reference Include="Mackoy.IInputDevice">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\mackoy\BveTs5\Mackoy.IInputDevice.DLL</HintPath>
     </Reference>
-    <Reference Include="StructureReuser">
-      <HintPath>..\..\..\..\ビルド置き場\MetroDrive-Unity\Apps\BveTs\BveTs6\Input Devices\AtsEx\1.0\Extensions\StructureReuser.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityNamedPipe">
-      <HintPath>..\..\..\..\UnityProjects\MetroDrive-Unity\Assets\Scripts\UnityNamedPipe.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

@@ -7,19 +7,11 @@ using ObjectiveHarmonyPatch;
 using AtsEx.PluginHost.Native;
 //using AtsEx.PluginHost.MapStatements;
 using AtsEx.Extensions.MapStatements;
-using System.Collections.Generic;
 using Mackoy.Bvets;
-using System.Timers;
-using System.IO.Pipes;
-using System.IO;
 using System.Windows.Forms;
-using System.Threading.Tasks;
-using MetroDrive.Extension;
+//using MetroDrive.Extension;
 using AtsEx.Extensions.SoundFactory;
-using static System.Collections.Specialized.BitVector32;
-using AtsEx.PluginHost.Sound;
 using AtsEx.PluginHost;
-using SlimDX.Direct3D9;
 
 namespace MetroDrive.MapPlugin
 {
@@ -89,10 +81,10 @@ namespace MetroDrive.MapPlugin
         bool isOverEnd = false;
         public MapPluginMain(PluginBuilder builder) : base(builder)
         {
-            if (!System.Diagnostics.Debugger.IsAttached)
+            /*if (!System.Diagnostics.Debugger.IsAttached)
             {
                 System.Diagnostics.Debugger.Launch();
-            }
+            }*/
             sharedMes = "none";
             life = new Life();
             timeDrawer = new TimeDrawer();
@@ -130,14 +122,22 @@ namespace MetroDrive.MapPlugin
             drawPatch.Invoked += DrawPatch_Invoked;
             //計器照明を有効に
             InputEventArgs inputEventArgs = new InputEventArgs(-2, 15);
+            //時刻表を無効に
+            InputEventArgs inputEventArgs2 = new InputEventArgs(-3, 8);
             BveHacker.KeyProvider.KeyDown_Invoke(inputEventArgs);
             BveHacker.KeyProvider.KeyUp_Invoke(inputEventArgs);
+            BveHacker.KeyProvider.KeyDown_Invoke(inputEventArgs2);
+            BveHacker.KeyProvider.KeyUp_Invoke(inputEventArgs2);
             isTimeOut = false;
             //MessageBox.Show("MetroDriveプラグインが読み込まれました");
             //NamedPipe((int)NeXTLocation);
             isPause= false;
             BveHacker.ScenarioCreated += OnScenarioCreated;
-    }
+            BveHacker.MainFormSource.Activate();
+            BveHacker.MainFormSource.TopMost = true;
+        }
+
+
         void OnScenarioCreated(ScenarioCreatedEventArgs e)
         {
             soundControll.OnStart(Extensions.GetExtension<ISoundFactory>(),Location);
@@ -303,6 +303,7 @@ namespace MetroDrive.MapPlugin
                     isTaiken = true;
                     life.istaiken = true;
                     keikoku.isTaikenStart = true;
+                    keikoku.isTaikenLife = true;
                     break;
                 case 801:
                     keikoku.isTaikenStart = false;
